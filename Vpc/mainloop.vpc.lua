@@ -24,10 +24,25 @@ function intersectRoomObject curlvldata, curlvlObjects, myrect1, myrect2, myrect
     global curlevel, lvlObjects, propsperobj
     put item 2 of curlvldata into numobjects
     put "" into ret
+    put top of cd btn "glider_spritesme" into x0
+    put left of cd btn "glider_spritesme" into y0
+    put right of cd btn "glider_spritesme" into x1
+    put bottom of cd btn "glider_spritesme" into y1
     repeat with i = 1 to numobjects
         put (propsperobj * (i-1)) - 1 into j
-        put rectIntersect(myrect1, myrect2, myrect3, myrect4, item (j+3) of curlvlObjects,item (j+4) of curlvlObjects,item (j+5) of curlvlObjects, item (j+6) of curlvlObjects) into intersected
-        if intersected != "0" then
+        put  item (j+1) of curlvlObjects into objtypename
+        if objtypename is "outlet" then
+            mainloopgame_periodic i, curlvldata, curlvlObjects
+        end if
+        put item (j+3) of curlvlObjects into boxx0
+        put item (j+4) of curlvlObjects into boxx1
+        put item (j+5) of curlvlObjects into boxy0
+        put item (j+6) of curlvlObjects into boxy1
+        if (x0 >= boxx1 or y0 >= boxy1)  then
+        -- it's way outside on the right or bottom
+        else if (x1 < boxx0 or y1 < boxy0)  then
+        -- it's way outside on the left or top
+        else
             put "|" & i after ret
         end if
     end repeat
@@ -156,36 +171,30 @@ on mainloopgame_collisions curlvldata, curlvlObjects
 end mainloopgame_collisions
 
 on mainloopgame
-    global curlevel, lvlData, lvlObjects, dx, dy
+    global curlevel, lvlData, lvlObjects, dx, dy, gcurlvldata, gcurlvlObjects
     -- ideally, the hit box would be bigger to account for case when you are moving really fast
     -- and could warp through a solid object
     -- but we never go that fast, don't need it yet
-    put line (curlevel) of lvlData into curlvldata
-    put line (curlevel) of lvlObjects into curlvlObjects
     put 0 into dx
     put 0 into dy
-    mainloopgame_collisions curlvldata, curlvlObjects
-    mainloopgame_checkbounds curlvldata, curlvlObjects
-    mainloopgame_motion curlvldata, curlvlObjects
-    mainloopgame_periodic curlvldata, curlvlObjects
+    mainloopgame_collisions gcurlvldata, gcurlvlObjects
+    mainloopgame_checkbounds gcurlvldata, gcurlvlObjects
+    mainloopgame_motion gcurlvldata, gcurlvlObjects
 end mainloopgame
 
-on mainloopgame_periodic curlvldata, curlvlObjects
+on mainloopgame_periodic i, curlvldata, curlvlObjects
     global clockcount, propsperobj
     add 1 to clockcount
     if clockcount mod 20 is 1 then
-        put item 2 of curlvldata into numobjects
-        repeat with i = 1 to numobjects
-            put (propsperobj * (i-1)) - 1 into j
-            put item (j+1) of curlvlObjects into objtypename
-            if objtypename is "outlet" then
-                if the icon of cd btn ("glider_sprites" & i) is sprites_outletspark1 then
-                    set the icon of cd btn ("glider_sprites" & i) to sprites_outlet
-                else
-                    set the icon of cd btn ("glider_sprites" & i) to sprites_outletspark1
-                end if
+        put (propsperobj * (i-1)) - 1 into j
+        put item (j+1) of curlvlObjects into objtypename
+        if objtypename is "outlet" then
+            if the icon of cd btn ("glider_sprites" & i) is sprites_outletspark1 then
+                set the icon of cd btn ("glider_sprites" & i) to sprites_outlet
+            else
+                set the icon of cd btn ("glider_sprites" & i) to sprites_outletspark1
             end if
-        end repeat
+        end if
     end if
 end mainloopgame_periodic
 
@@ -297,7 +306,12 @@ on begindeath
 end begindeath
 
 on refreshOnLevelChange
-    global curlevel
+    global curlevel, gcurlvldata, gcurlvlObjects, lvlData, lvlObjects
+    if curlevel is not "needreset" and curlevel >= 1 then
+        put line (curlevel) of lvlData into gcurlvldata
+        put line (curlevel) of lvlObjects into gcurlvlObjects
+    end if
+    
     repeat with x=1 to 16
         hide cd btn ("glider_sprites" & x)
     end repeat
@@ -322,7 +336,7 @@ on refreshOnLevelChange
     else if curlevel is "" or curlevel is -1 then
         put -1 into curlevel
         set the icon of cd btn "glider_bg0" to 1
-        set the rect of cd btn "btn_continue" to 422,48,422+123,48+74
+        set the rect of cd btn "btn_continue" to (512-28)-120,28,512-28,28+74
         set the label of cd btn "btn_continue" to "New Game"
     else if curlevel is -2 then
         set the icon of cd btn "glider_bg0" to 2

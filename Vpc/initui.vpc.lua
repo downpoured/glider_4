@@ -83,7 +83,7 @@ on initui
     set the showlabel of cd btn "glider_bg0" to false
     set the showlabel of cd btn "glider_spritesme" to false
     set the showlabel of cd btn "glider_spritesshadow" to false
-    set the rect of cd btn "glider_bg0" to -1, -1, 515, 345
+    set the rect of cd btn "glider_bg0" to -3, -1, 515, 345
     set the rect of cd btn "glider_spritesme" to 0,0,48+q,20+q
     set the rect of cd btn "glider_spritesshadow" to 0,0,48+q,20+q
     
