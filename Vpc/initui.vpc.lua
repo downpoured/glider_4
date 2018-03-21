@@ -40,8 +40,9 @@ on mouseup
 end if
 
 on startnewgame
-    global cheat_invincible, state, curlevel, sprites_right_forward, sprites_shadoRght
+    global cheat_invincible, state, curlevel, sprites_right_forward, sprites_shadoRght, clockcount
     global lastdirpressed, dy
+    global levelsseen
     initSpriteConstantsAndLoadGameData
     put false into cheat_invincible
     put "playing" into state
@@ -53,7 +54,10 @@ on startnewgame
     set the topleft of cd btn "glider_spritesme" to 20, 20
     set the topleft of cd btn "glider_spritesshadow" to -400, -400
     put "" into lastdirpressed
+    put "" into levelsseen
+    put 1 into line 1 of levelsseen
     put 0 into dy
+    put 0 into clockcount
 end startnewgame
 
 on initui

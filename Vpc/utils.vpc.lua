@@ -105,77 +105,93 @@ function getCollideResult objtypename, isOn, amount, extra
 end getCollideResult
 
 on initSpriteConstantsAndLoadGameData
-    global sprites_shadoRght, sprites_shadoLft, sprites_right_forward, sprites_right_tipped, sprites_left_forward, sprites_left_tipped, sprites_turn_endpoint, sprites_right_forward2, sprites_right_tipped2, sprites_left_forward2, sprites_left_tipped2, sprites_turn_endpoint2, sprites_burnrght1, sprites_burnrght2, sprites_burnlft1, sprites_burnlft2, sprites_alldeadrght, sprites_alldeadlft, sprites_celVnt, sprites_celDct, sprites_flrVnt, sprites_paper, sprites_toastr, sprites_toast1, sprites_toast2, sprites_toast3, sprites_toast4, sprites_toast5, sprites_toast6, sprites_teaKtl, sprites_lftFan, sprites_ritFan, sprites_table, sprites_shredr, sprites_books, sprites_clock, sprites_candle, sprites_rbrBnd, sprites_ball, sprites_fshBwl, sprites_fish1, sprites_fish2, sprites_fish3, sprites_fish4, sprites_grease, sprites_greasefall1, sprites_greasefall2, sprites_litSwt, sprites_thermo, sprites_outlet, sprites_outletspark1, sprites_outletspark2, sprites_pwrSwt, sprites_guitar, sprites_drip, sprites_shelf, sprites_basket, sprites_paintg, sprites_battry, sprites_macTsh, sprites_upStar, sprites_dnStar, sprites_candleflame1, sprites_candleflame2, sprites_candleflame3, sprites_drop1, sprites_drop2, sprites_drop3, sprites_drop4, sprites_drop5, 
-    put 1+1 into sprites_shadoRght
-    put 1+2 into sprites_shadoLft
-    put 1+3 into sprites_right_forward
-    put 1+4 into sprites_right_tipped
-    put 1+5 into sprites_left_forward
-    put 1+6 into sprites_left_tipped
-    put 1+7 into sprites_turn_endpoint
-    put 1+8 into sprites_right_forward2
-    put 1+9 into sprites_right_tipped2
-    put 1+10 into sprites_left_forward2
-    put 1+11 into sprites_left_tipped2
-    put 1+12 into sprites_turn_endpoint2
-    put 1+13 into sprites_burnrght1
-    put 1+14 into sprites_burnrght2
-    put 1+15 into sprites_burnlft1
-    put 1+16 into sprites_burnlft2
-    put 1+17 into sprites_alldeadrght
-    put 1+18 into sprites_alldeadlft
-    put 1+19 into sprites_celVnt
-    put 1+20 into sprites_celDct
-    put 1+21 into sprites_flrVnt
-    put 1+22 into sprites_paper
-    put 1+23 into sprites_toastr
-    put 1+24 into sprites_toast1
-    put 1+25 into sprites_toast2
-    put 1+26 into sprites_toast3
-    put 1+27 into sprites_toast4
-    put 1+28 into sprites_toast5
-    put 1+29 into sprites_toast6
-    put 1+30 into sprites_teaKtl
-    put 1+31 into sprites_lftFan
-    put 1+32 into sprites_ritFan
-    put 1+33 into sprites_table
-    put 1+34 into sprites_shredr
-    put 1+35 into sprites_books
-    put 1+36 into sprites_clock
-    put 1+37 into sprites_candle
-    put 1+38 into sprites_rbrBnd
-    put 1+39 into sprites_ball
-    put 1+40 into sprites_fshBwl
-    put 1+41 into sprites_fish1
-    put 1+42 into sprites_fish2
-    put 1+43 into sprites_fish3
-    put 1+44 into sprites_fish4
-    put 1+45 into sprites_grease
-    put 1+46 into sprites_greasefall1
-    put 1+47 into sprites_greasefall2
-    put 1+48 into sprites_litSwt
-    put 1+49 into sprites_thermo
-    put 1+50 into sprites_outlet
-    put 1+51 into sprites_outletspark1
-    put 1+52 into sprites_outletspark2
-    put 1+53 into sprites_pwrSwt
-    put 1+54 into sprites_guitar
-    put 1+55 into sprites_drip
-    put 1+56 into sprites_shelf
-    put 1+57 into sprites_basket
-    put 1+58 into sprites_paintg
-    put 1+59 into sprites_battry
-    put 1+60 into sprites_macTsh
-    put 1+61 into sprites_upStar
-    put 1+62 into sprites_dnStar
-    put 1+63 into sprites_candleflame1
-    put 1+64 into sprites_candleflame2
-    put 1+65 into sprites_candleflame3
-    put 1+66 into sprites_drop1
-    put 1+67 into sprites_drop2
-    put 1+68 into sprites_drop3
-    put 1+69 into sprites_drop4
-    put 1+70 into sprites_drop5
+    global sprites_ventpatternx, sprites_ventpatterny
+    put 73 into sprites_ventpatternx -- not ready yet
+    put 72 into sprites_ventpatterny
+
+    global sprites_shadoRght, sprites_shadoLft, sprites_right_forward, sprites_right_tipped, sprites_left_forward, sprites_left_tipped
+    global sprites_turn_endpoint, sprites_right_forward2, sprites_right_tipped2, sprites_left_forward2, sprites_left_tipped2, sprites_turn_endpoint2
+    global sprites_burnrght1, sprites_burnrght2, sprites_burnlft1, sprites_burnlft2, sprites_alldeadrght, sprites_alldeadlft
+    global sprites_celVnt, sprites_celDct, sprites_flrVnt, sprites_paper, sprites_toastr, sprites_toast1
+    global sprites_toast2, sprites_toast3, sprites_toast4, sprites_toast5, sprites_toast6, sprites_teaKtl
+    global sprites_lftFan, sprites_ritFan, sprites_table, sprites_shredr, sprites_books, sprites_clock
+    global sprites_candle, sprites_rbrBnd, sprites_ball, sprites_fshBwl, sprites_fish1, sprites_fish2
+    global sprites_fish3, sprites_fish4, sprites_grease, sprites_greasefall1, sprites_greasefall2, sprites_litSwt
+    global sprites_thermo, sprites_outlet, sprites_outletspark1, sprites_outletspark2, sprites_pwrSwt, sprites_guitar
+    global sprites_drip, sprites_shelf, sprites_basket, sprites_paintg, sprites_battry, sprites_macTsh
+    global sprites_upStar, sprites_dnStar, sprites_candleflame1, sprites_candleflame2, sprites_candleflame3, sprites_drop1
+    global sprites_drop2, sprites_drop3, sprites_drop4, sprites_drop5
+    put 2 into sprites_shadoRght
+    put 3 into sprites_shadoLft
+    put 4 into sprites_right_forward
+    put 5 into sprites_right_tipped
+    put 6 into sprites_left_forward
+    put 7 into sprites_left_tipped
+    put 8 into sprites_turn_endpoint
+    put 9 into sprites_right_forward2
+    put 10 into sprites_right_tipped2
+    put 11 into sprites_left_forward2
+    put 12 into sprites_left_tipped2
+    put 13 into sprites_turn_endpoint2
+    put 14 into sprites_burnrght1
+    put 15 into sprites_burnrght2
+    put 16 into sprites_burnlft1
+    put 17 into sprites_burnlft2
+    put 18 into sprites_alldeadrght
+    put 19 into sprites_alldeadlft
+    put 20 into sprites_celVnt
+    put 21 into sprites_celDct
+    put 22 into sprites_flrVnt
+    put 23 into sprites_paper
+    put 24 into sprites_toastr
+    put 25 into sprites_toast1
+    put 26 into sprites_toast2
+    put 27 into sprites_toast3
+    put 28 into sprites_toast4
+    put 29 into sprites_toast5
+    put 30 into sprites_toast6
+    put 31 into sprites_teaKtl
+    put 32 into sprites_lftFan
+    put 33 into sprites_ritFan
+    put 34 into sprites_table
+    put 35 into sprites_shredr
+    put 36 into sprites_books
+    put 37 into sprites_clock
+    put 38 into sprites_candle
+    put 39 into sprites_rbrBnd
+    put 40 into sprites_ball
+    put 41 into sprites_fshBwl
+    put 42 into sprites_fish1
+    put 43 into sprites_fish2
+    put 44 into sprites_fish3
+    put 45 into sprites_fish4
+    put 46 into sprites_grease
+    put 47 into sprites_greasefall1
+    put 48 into sprites_greasefall2
+    put 49 into sprites_litSwt
+    put 50 into sprites_thermo
+    put 51 into sprites_outlet
+    put 52 into sprites_outletspark1
+    put 53 into sprites_outletspark2
+    put 54 into sprites_pwrSwt
+    put 55 into sprites_guitar
+    put 56 into sprites_drip
+    put 57 into sprites_shelf
+    put 58 into sprites_basket
+    put 59 into sprites_paintg
+    put 60 into sprites_battry
+    put 61 into sprites_macTsh
+    put 62 into sprites_upStar
+    put 63 into sprites_dnStar
+    put 64 into sprites_candleflame1
+    put 65 into sprites_candleflame2
+    put 66 into sprites_candleflame3
+    put 67 into sprites_drop1
+    put 68 into sprites_drop2
+    put 69 into sprites_drop3
+    put 70 into sprites_drop4
+    put 71 into sprites_drop5
+
     
     global lvlData, lvlObjects
     put "Welcome...|5|0|1|0|0|0|0" into line 1 of lvlData
