@@ -45,6 +45,7 @@ on startnewgame
     initSpriteConstantsAndLoadGameData
     put false into cheat_invincible
     put "playing" into state
+    put "" into cd fld "behindlives"
     put 3 into cd fld "lives"
     put 0 into cd fld "score"
     put 1 into curlevel
@@ -74,12 +75,17 @@ on initui
     set the defaulttextsize of cd fld "gameover" to "18"
     set the textalign of cd fld "gameover" to "center"
     
+    put 1 into q -- need to tweak the rect of everything larger, to make the sprite show up
+    
     set the style of cd btn "glider_bg0" to "transparent"
     set the style of cd btn "glider_spritesme" to "transparent"
     set the style of cd btn "glider_spritesshadow" to "transparent"
+    set the showlabel of cd btn "glider_bg0" to false
+    set the showlabel of cd btn "glider_spritesme" to false
+    set the showlabel of cd btn "glider_spritesshadow" to false
     set the rect of cd btn "glider_bg0" to -1, -1, 515, 345
-    set the rect of cd btn "glider_spritesme" to 0,0,48,20
-    set the rect of cd btn "glider_spritesshadow" to 0,0,48,20
+    set the rect of cd btn "glider_spritesme" to 0,0,48+q,20+q
+    set the rect of cd btn "glider_spritesshadow" to 0,0,48+q,20+q
     
     put 20 into basey
     put 22 into h

@@ -48,10 +48,11 @@ on mainloopgame_motion curlvldata, curlvlObjects
         put 0 into dy
     end if
     if lastdirpressed is "-1" then
-        add -5 to dx
+        add -2 to dx
     else if lastdirpressed is "1" then
-        add 5 to dx
+        add 2 to dx
     end if
+    put "" into lastdirpressed
     set the topleft of cd btn "glider_spritesme" to (the left of cd btn "glider_spritesme" + dx), (the top of cd btn "glider_spritesme" + dy)
     set the topleft of cd btn "glider_spritesshadow" to (the left of cd btn "glider_spritesme" + dx), 320
 end mainloopgame_motion
@@ -60,9 +61,9 @@ on mainloopgame_checkbounds curlvldata, curlvlObjects
     global lastdirpressed, curlevel, lvlData
     put (item 3 of curlvldata is 1) into leftopen
     put (item 4 of curlvldata is 1) into rghtopen
-    if the bottom of cd btn "glider_spritesme" > 300 then
+    if the bottom of cd btn "glider_spritesme" > 328 then
         begindeath
-        set the bottom of cd btn "glider_spritesme" to 300
+        set the bottom of cd btn "glider_spritesme" to 328
     else if the top of cd btn "glider_spritesme" < 30 then
         set the top of cd btn "glider_spritesme" to 30
     end if
@@ -100,7 +101,7 @@ on mainloopgame_collisions curlvldata, curlvlObjects
     put false into isdead
     
     put 0 into dx 
-    put 5 into dy -- by default, we fall
+    put 4 into dy -- by default, we fall
     repeat with numintersect = 1 to numintersects
         put item (numintersect) of intersects into i
         put item (((i-1)*propsperobj)+(1-1)) of curlvlObjects into objtypename
@@ -116,7 +117,7 @@ on mainloopgame_collisions curlvldata, curlvlObjects
         else if collideType is "moveIt" then
             -- not yet supported
         else if collideType is "liftIt" then
-            put -5 into dy
+            put -3 into dy
         else if collideType is "dropIt" then
             put 5 into dy
         else if collideType is "burnIt" then
@@ -161,6 +162,8 @@ on mainloopgame
     -- but we never go that fast, don't need it yet
     put line (curlevel) of lvlData into curlvldata
     put line (curlevel) of lvlObjects into curlvlObjects
+    put 0 into dx
+    put 0 into dy
     mainloopgame_collisions curlvldata, curlvlObjects
     mainloopgame_checkbounds curlvldata, curlvlObjects
     mainloopgame_motion curlvldata, curlvlObjects
@@ -187,7 +190,7 @@ on mainloopgame_periodic curlvldata, curlvlObjects
 end mainloopgame_periodic
 
 on mainloopdying
-    global deathcount, state, curlevel
+    global deathcount, state, curlevel, sprites_right_forward
     if deathcount < 400 then
         put deathcount+1 into deathcount
     else
@@ -261,11 +264,11 @@ on idle
     mainloop
 end idle
 
-on afterkeydown
+on afterkeyup
     global lastdirpressed, cheat_invincible
     if keychar() is "ArrowLeft" then
         put "-1" into lastdirpressed
-    else if keychar() is "ArrowLeft" then
+    else if keychar() is "ArrowRight" then
         put "1" into lastdirpressed
     else if keyChar() is "I" and shiftKey() then
         answer "toggle cheatcode:invincible"
@@ -282,7 +285,7 @@ on afterkeydown
         show cd btn "btn_continue"
         set the label of cd btn "btn_continue" to "Start Over"
     end if
-end afterkeydown
+end afterkeyup
 
 on begindeath
     global state, deathcount, sprites_alldeadrght, cheat_invincible
@@ -305,12 +308,7 @@ on refreshOnLevelChange
     put "" into lastdirpressed
     put 9 into propsperobj
     set the itemdelimiter to "|"
-    
---~     --temp
---~     answer "temp"
---~     hide cd btn "glider_bg0"
-    
-    
+    show cd btn "glider_bg0"
     hide cd fld "roomname"
     hide cd fld "score"
     hide cd fld "lives"
@@ -359,9 +357,11 @@ on refreshOnLevelChange
         show cd fld "score"
         show cd fld "lives"
         show cd fld "behindlives"
-        hide cd btn "glider_spriteslivesicon"
+        show cd btn "glider_spriteslivesicon"
         set the icon of cd btn "glider_bg0" to 3+curlevel
         hide cd btn "btn_continue"
+        
+        put 2 into q -- need to tweak the rect of everything larger, to make the sprite show up
         
         -- actually load the room
         global curlevel, lvlData, lvlObjects, dx, dy, propsperobj
@@ -373,7 +373,7 @@ on refreshOnLevelChange
         put item 2 of curlvldata into numobjects
         repeat with i = 1 to numobjects
             put (propsperobj * (i-1)) - 1 into j
-            set the rect of cd btn ("glider_sprites" & i) to item (j+3) of curlvlObjects,item (j+4) of curlvlObjects,item (j+5) of curlvlObjects, item (j+6) of curlvlObjects
+            set the rect of cd btn ("glider_sprites" & i) to item (j+3) of curlvlObjects,item (j+4) of curlvlObjects,(q+item (j+5) of curlvlObjects), (q+item (j+6) of curlvlObjects)
             set the icon of cd btn ("glider_sprites" & i) to 0 -- invisible by default
             show cd btn ("glider_sprites" & i)
             put item (j+1) of curlvlObjects into objtypename
