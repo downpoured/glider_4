@@ -1,3 +1,5 @@
+-- Glider, ported from Glider4 by Ben Fisher, https://github.com/downpoured/glider_4
+-- script of cd "cdglider":
 
 -- -- level data:
 -- 1|roomname
@@ -38,8 +40,6 @@ function intersectRoomObject curlvldata, curlvlObjects, myrect1, myrect2, myrect
         put item (j+4) of curlvlObjects into boxy0
         put item (j+5) of curlvlObjects into boxx1
         put item (j+6) of curlvlObjects into boxy1
-        --answer (objtypename && boxx0 &&boxx0 &&boxx0 &&boxx0 &&)
-        
         if (x0 >= boxx1 or y0 >= boxy1)  then
         -- it's way outside on the right or bottom
         else if (x1 < boxx0 or y1 < boxy0)  then
@@ -48,14 +48,8 @@ function intersectRoomObject curlvldata, curlvlObjects, myrect1, myrect2, myrect
             put "|" & i after ret
         end if
     end repeat
-    if length(ret) > 0 then
-        -- delete initial |
-        put char 2 to (the number of chars in ret) of ret into ret
-    end if
     return ret
 end intersectRoomObject
-
-
 
 
 on mainloopgame_motion curlvldata, curlvlObjects
@@ -88,14 +82,14 @@ on mainloopgame_checkbounds curlvldata, curlvlObjects
     if the left of cd btn "glider_spritesme" <= 0 then
         if leftopen then
             beginloadlevel curlevel - 1
-            set the topleft of cd btn "glider_spritesme" to 450,20
+            set the left of cd btn "glider_spritesme" to 450
         else
             set the left of cd btn "glider_spritesme" to 0
         end if
     else if the right of cd btn "glider_spritesme" >= 511 then
         if rghtopen then
             beginloadlevel curlevel + 1
-            set the topleft of cd btn "glider_spritesme" to 20,20
+            set the left of cd btn "glider_spritesme" to 20
         else
             set the right of cd btn "glider_spritesme" to 511
         end if
@@ -119,7 +113,7 @@ on mainloopgame_collisions curlvldata, curlvlObjects
     
     put 0 into dx 
     put 6 into dy -- by default, we fall
-    repeat with numintersect = 1 to numintersects
+    repeat with numintersect = 2 to numintersects -- ignore the first
         put item (numintersect) of intersects into i
         put item (((i-1)*propsperobj)+(1)) of curlvlObjects into objtypename
         put item (((i-1)*propsperobj)+(7)) of curlvlObjects into amount
@@ -172,20 +166,9 @@ on mainloopgame_collisions curlvldata, curlvlObjects
     end repeat
 end mainloopgame_collisions
 
-on mainloopgame
-    global curlevel, lvlData, lvlObjects, dx, dy, gcurlvldata, gcurlvlObjects
-    -- ideally, the hit box would be bigger to account for case when you are moving really fast
-    -- and could warp through a solid object
-    -- but we never go that fast, don't need it yet
-    put 0 into dx
-    put 0 into dy
-    mainloopgame_collisions gcurlvldata, gcurlvlObjects
-    mainloopgame_checkbounds gcurlvldata, gcurlvlObjects
-    mainloopgame_motion gcurlvldata, gcurlvlObjects
-end mainloopgame
 
 on mainloopgame_periodic i, curlvldata, curlvlObjects
-    global clockcount, propsperobj
+    global clockcount, propsperobj, sprites_outlet, sprites_outletspark1
     add 1 to clockcount
     if clockcount mod 20 is 1 then
         put (propsperobj * (i-1)) into j
@@ -219,9 +202,9 @@ on mainloopdying
 end mainloopdying
 
 on mainlooploadinglevel
-    global loadcount, state, curlevel
-    if loadcount < 4 then
-        put loadcount+1 into loadcount
+    global loadlevelcount, state, curlevel
+    if loadlevelcount < 2 then
+        put loadlevelcount+1 into loadlevelcount
         put "." after cd fld "roomname"
     else
         refreshOnLevelChange
@@ -230,9 +213,9 @@ on mainlooploadinglevel
 end mainlooploadinglevel
 
 on beginloadlevel nextlevel
-    global loadcount, state, curlevel
-    newlevelbonus
+    global loadlevelcount, state, curlevel
     put nextlevel into curlevel
+    newlevelbonus
     if curlevel < 1 then
             put 1 into curlevel --sanity check
     else if curlevel > 40 then
@@ -255,43 +238,44 @@ on beginloadlevel nextlevel
         put curlevel+1 into curlevel
     end if
     
-    put 0 into loadcount
+    put 0 into loadlevelcount
     put "Loading" into cd fld "roomname"
     put "loadinglevel" into state
 end beginloadlevel
 
-on mainloop
+on idle
     global state
     if state is "playing" then
-        mainloopgame
+        global curlevel, lvlData, lvlObjects, dx, dy, gcurlvldata, gcurlvlObjects
+        -- warning: be careful that we don't warp through a solid object.
+        -- for example, if you are moving at 12 pixels per update, and your height is 5 pixels, it's possible to completely slip through
+        -- a solid object that is only 6 pixels wide
+        put 0 into dx
+        put 0 into dy
+        mainloopgame_collisions gcurlvldata, gcurlvlObjects
+        mainloopgame_checkbounds gcurlvldata, gcurlvlObjects
+        mainloopgame_motion gcurlvldata, gcurlvlObjects
     else if state is "dying" then
         mainloopdying
     else if state is "loadinglevel" then
         mainlooploadinglevel
     end if
-end mainloop
-
-on idle
-    mainloop
 end idle
 
 on afterkeydown
     global lastdirpressed, cheat_invincible
-    if keyrepeated() then
-        exit afterkeydown
-    end if
     if keychar() is "ArrowLeft" then
         put "-1" into lastdirpressed
     else if keychar() is "ArrowRight" then
         put "1" into lastdirpressed
-    else if keyChar() is "I" and shiftKey() then
+    else if keyChar() is "I" and shiftKey() and not keyrepeated() then
         answer "toggle cheatcode:invincible"
         if cheat_invincible is true then
             put false into cheat_invincible
         else
             put true into cheat_invincible
         end if
-    else if keyChar() is "N" and shiftKey() then
+    else if keyChar() is "N" and shiftKey() and not keyrepeated() then
         global curlevel, state
         put "needreset" into curlevel
         put "nogame" into state
@@ -336,6 +320,7 @@ on refreshOnLevelChange
     hide cd fld "gameover"
     
     show cd btn "btn_continue"
+    set the idlerate to "default"
     if curlevel is "needreset" then
         exit refreshOnLevelChange
     else if curlevel is "" or curlevel is -1 then
@@ -350,7 +335,7 @@ on refreshOnLevelChange
     else if curlevel is -3 then
         set the icon of cd btn "glider_bg0" to 3
         set the rect of cd btn "btn_continue" to 126,300,126+254,300+36
-        set the label of cd btn "btn_continue" to "Back"
+        set the label of cd btn "btn_continue" to "Home"
         if cd fld "lives" > 0 then
             hide cd fld "gameover"
         else
@@ -358,6 +343,7 @@ on refreshOnLevelChange
             put (newline & newline & "Game Over..." & newline & newline & "Your score was " & (cd fld "score") & ".") into cd fld "gameover"
         end if
     else
+        set the idlerate to "faster"
         global sprites_shadoRght, sprites_shadoLft, sprites_right_forward, sprites_right_tipped, sprites_left_forward, sprites_left_tipped
         global sprites_turn_endpoint, sprites_right_forward2, sprites_right_tipped2, sprites_left_forward2, sprites_left_tipped2, sprites_turn_endpoint2
         global sprites_burnrght1, sprites_burnrght2, sprites_burnlft1, sprites_burnlft2, sprites_alldeadrght, sprites_alldeadlft
@@ -379,6 +365,10 @@ on refreshOnLevelChange
         show cd btn "glider_spriteslivesicon"
         set the icon of cd btn "glider_bg0" to 3+curlevel
         hide cd btn "btn_continue"
+        global sprites_ventpatterny
+        
+        put 24 into kCeilingVert
+		put 325 into kFloorVert
         
         put 2 into q -- need to tweak the rect of everything larger, to make the sprite show up
         
@@ -392,13 +382,42 @@ on refreshOnLevelChange
         put item 2 of curlvldata into numobjects
         repeat with i = 1 to numobjects
             put (propsperobj * (i-1))  into j
-            set the rect of cd btn ("glider_sprites" & i) to item (j+3) of curlvlObjects,item (j+4) of curlvlObjects,(q+item (j+5) of curlvlObjects), (q+item (j+6) of curlvlObjects)
+            put item (j+3) of curlvlObjects into spritex0
+            put item (j+4) of curlvlObjects into spritey0
+            put item (j+5) of curlvlObjects into spritex1
+            put item (j+6) of curlvlObjects into spritey1
+            set the rect of cd btn ("glider_sprites" & i) to spritex0, spritey0, spritex1, spritey1
             set the icon of cd btn ("glider_sprites" & i) to 0 -- invisible by default
             show cd btn ("glider_sprites" & i)
             put item (j+1) of curlvlObjects into objtypename
-            if objtypename is "flrVnt" or objtypename is "celVnt" or objtypename is "celDct" then
-                global sprites_ventpatterny
+            put item (j+7) of curlvlObjects into amount
+            if objtypename is "flrVnt" then
                 set the icon of cd btn ("glider_sprites" & i) to sprites_ventpatterny
+                -- the event rect is different than the sprite rect. see tempInt := (boundRect.right + boundRect.left) div 2;
+                put round((spritex0 + spritex1)/2) into tempInt
+                set the rect of cd btn ("glider_sprites" & i) to tempInt - 8, amount, tempInt + 8, kFloorVert
+            else if objtypename is "celVnt" then
+                set the icon of cd btn ("glider_sprites" & i) to sprites_ventpatterny
+                put round((spritex0 + spritex1)/2) into tempInt
+                set the rect of cd btn ("glider_sprites" & i) to tempInt - 8, kCeilingVert, tempInt + 8, amount
+            else if objtypename is "celDct" then
+                set the icon of cd btn ("glider_sprites" & i) to sprites_ventpatterny
+                put round((spritex0 + spritex1)/2) into tempInt
+                set the rect of cd btn ("glider_sprites" & i) to tempInt - 8, kCeilingVert, tempInt + 8, amount
+            else if objtypename is "lftFan" then
+                set the rect of cd btn ("glider_sprites" & i) to amount, spritey0 + 10, spritex0, spritey0 + 30
+            else if objtypename is "ritFan" then
+                set the rect of cd btn ("glider_sprites" & i) to spritex1, spritey0 + 10, amount, spritey0 + 30
+            else if objtypename is "guitar" then
+                set the rect of cd btn ("glider_sprites" & i) to spritex0+36, spritey0 + 24, spritex0+38, spritey1 -56
+            else if objtypename is "upStar" then
+                set the rect of cd btn ("glider_sprites" & i) to spritex0 + 32, spritey0, spritex1 - 32, spritey0 + 8
+            else if objtypename is "dnStar" then
+                set the rect of cd btn ("glider_sprites" & i) to spritex0 + 32, spritey1 - 8, spritex1 - 32, spritey1
+            else if objtypename is "candle" then
+                put round((spritex0 + spritex1)/2) into tempInt
+				set the rect of cd btn ("glider_sprites" & i) to tempInt - 12, amount, tempInt + 4, spritey0
+                
             else if objtypename is "outlet" then
                 set the icon of cd btn ("glider_sprites" & i) to sprites_outlet
             else if objtypename is "clock" then
@@ -434,6 +453,9 @@ on refreshOnLevelChange
             else if objtypename is "macTsh" then
                 set the icon of cd btn ("glider_sprites" & i) to sprites_macTsh
             end if
+            
+            set the width of cd btn ("glider_sprites" & i) to q + the width of cd btn ("glider_sprites" & i)
+            set the height of cd btn ("glider_sprites" & i) to q + the height of cd btn ("glider_sprites" & i)
         end repeat
     end if
 end refreshOnLevelChange

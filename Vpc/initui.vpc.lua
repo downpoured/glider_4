@@ -1,4 +1,5 @@
-
+-- Glider, ported from Glider4 by Ben Fisher, https://github.com/downpoured/glider_4
+-- script of cd btn "btn_continue":
 
 -- cd btn "glider_bg0"
 -- cd btn "glider_sprites1-16"
@@ -11,8 +12,6 @@
 -- cd fld "behindlives"
 -- cd fld "gameover"
 -- cd btn "glider_spriteslivesicon"
-
--- script of cd btn "btn_continue":
 
 on mouseup
     global curlevel, state
@@ -98,6 +97,9 @@ on initui
     set the icon of cd btn "glider_spriteslivesicon" to sprites_right_forward
     set the showlabel of cd btn "glider_spriteslivesicon" to false
     
+    set the defaulttextfont of cd fld "roomname" to "chicago" 
+    set the defaulttextfont of cd fld "score" to "chicago" 
+    set the defaulttextfont of cd fld "lives" to "chicago" 
     set the locktext of cd fld "roomname" to true 
     set the locktext of cd fld "score" to true 
     set the locktext of cd fld "lives" to true 
@@ -106,8 +108,8 @@ on initui
     
     repeat with x=1 to 16
         hide cd btn ("glider_sprites" & x)
---~         set the style of cd btn ("glider_sprites" & x) to "transparent"
-        set the style of cd btn ("glider_sprites" & x) to "rectangle"
+        set the style of cd btn ("glider_sprites" & x) to "transparent"
+--~         set the style of cd btn ("glider_sprites" & x) to "rectangle"
         set the showlabel of cd btn ("glider_sprites" & x)  to false
         set the autohilite of cd btn ("glider_sprites" & x)  to false
         set the icon of cd btn ("glider_sprites" & x) to 0

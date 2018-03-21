@@ -1,4 +1,5 @@
-
+-- Glider, ported from Glider4 by Ben Fisher, https://github.com/downpoured/glider_4
+-- script of stack:
 
 function rectIntersect x0, x1, y0, y1, boxx0, boxx1, boxy0, boxy1
     if (x0 >= boxx1 or y0 >= boxy1)  then
