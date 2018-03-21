@@ -1,15 +1,15 @@
 
 
 function rectIntersect x0, x1, y0, y1, boxx0, boxx1, boxy0, boxy1
-    if (x0 >= boxx1 || y0 >= boxy1)  then
+    if (x0 >= boxx1 or y0 >= boxy1)  then
         -- it's way outside on the right or bottom
         return 0 -- no overlap
-     else if (x1 < boxx0 || y1 < boxy0)  then
+     else if (x1 < boxx0 or y1 < boxy0)  then
         -- it's way outside on the left or top
         return 0 -- no overlap
-     else if (x0 >= boxx0 && x1 <= boxx1 && y0 >= boxy0 && y1 <= boxy1)  then
+     else if (x0 >= boxx0 and x1 <= boxx1 and y0 >= boxy0 and y1 <= boxy1)  then
         return 1 -- CompletelyCovers;
-     else if (boxx0 >= x0 && boxx1 <= x1 && boxy0 >= y0 && boxy1 <= y1)  then
+     else if (boxx0 >= x0 and boxx1 <= x1 and boxy0 >= y0 and boxy1 <= y1)  then
         return 2 -- CompletelyWithin;
      else
         return 3 -- PartialOverlap;
@@ -200,39 +200,39 @@ on initSpriteConstantsAndLoadGameData
     put "Looking at you...|6|1|1|0|0|0|0" into line 4 of lvlData
     put "You're invited...|6|1|1|2|1|1|0" into line 5 of lvlData
     put "Jane be nimble...|5|1|1|1|1|1|0" into line 6 of lvlData
-    put "Hmm|7|1|1|0|0|0|0" into line 7 of lvlData
-    put "Timing is the key|9|1|1|0|0|0|0" into line 8 of lvlData
-    put "More enemies|8|1|1|0|1|2|0" into line 9 of lvlData
+    put "Hmm... a tall cabinet|7|1|1|0|0|0|0" into line 7 of lvlData
+    put "Timing is the key...|9|1|1|0|0|0|0" into line 8 of lvlData
+    put "More enemies...|8|1|1|0|1|2|0" into line 9 of lvlData
     put "Up a Down Staircase|4|1|1|1|1|1|0" into line 10 of lvlData
-    put "Still on this floor|9|1|1|0|0|0|2" into line 11 of lvlData
-    put "Deeper still|3|1|0|1|2|0|0" into line 12 of lvlData
+    put "Still on this floor...|9|1|1|0|0|0|2" into line 11 of lvlData
+    put "Deeper still...|3|1|0|1|2|0|0" into line 12 of lvlData
     put "What, a bombshelter?|11|0|1|0|0|0|0" into line 13 of lvlData
-    put "Power station|7|1|1|1|1|0|2" into line 14 of lvlData
+    put "Power station...|7|1|1|1|1|0|2" into line 14 of lvlData
     put "This is the basement|6|1|1|0|0|0|0" into line 15 of lvlData
-    put "Nothing here|4|1|1|0|0|0|2" into line 16 of lvlData
+    put "Nothing here...|4|1|1|0|0|0|2" into line 16 of lvlData
     put "The Looking Glass|3|1|0|0|0|0|0" into line 17 of lvlData
     put "Welcome, 2nd Floor|7|0|1|0|0|0|0" into line 18 of lvlData
     put "Zis Room|11|1|1|0|0|0|0" into line 19 of lvlData
-    put "This Old House|6|1|1|0|0|0|0" into line 20 of lvlData
+    put "This Old House...|6|1|1|0|0|0|0" into line 20 of lvlData
     put "The North Room|9|1|1|0|0|0|0" into line 21 of lvlData
     put "Windtunnels|8|1|1|0|0|0|0" into line 22 of lvlData
     put "Noisy Kids!|5|1|1|0|0|0|0" into line 23 of lvlData
     put "LeadFish|8|1|1|0|0|0|0" into line 24 of lvlData
     put "Air Steps|7|1|1|0|0|0|0" into line 25 of lvlData
     put "Fan Fun!|9|1|1|0|0|0|0" into line 26 of lvlData
-    put "Stormy Weather|10|1|1|0|0|0|2" into line 27 of lvlData
-    put "Slippery when greasy|7|1|1|0|0|0|0" into line 28 of lvlData
-    put "Turn me on|6|1|1|0|0|0|1" into line 29 of lvlData
+    put "Stormy Weather...|10|1|1|0|0|0|2" into line 27 of lvlData
+    put "Slippery when greasy...|7|1|1|0|0|0|0" into line 28 of lvlData
+    put "Turn me on...|6|1|1|0|0|0|1" into line 29 of lvlData
     put "Finally!!!|6|1|1|0|0|0|0" into line 30 of lvlData
-    put "Tempted|7|1|1|0|0|0|0" into line 31 of lvlData
+    put "Tempted...|7|1|1|0|0|0|0" into line 31 of lvlData
     put "Look Familiar?|6|1|0|0|0|0|0" into line 32 of lvlData
     put "You found me!|7|0|1|0|0|0|0" into line 33 of lvlData
     put "Welcome to Floor 3|6|1|1|1|2|1|0" into line 34 of lvlData
     put "A toaster?  Here?|8|1|1|0|0|0|0" into line 35 of lvlData
-    put "The galley|6|1|1|0|1|0|0" into line 36 of lvlData
+    put "The galley...|6|1|1|0|1|0|0" into line 36 of lvlData
     put "Wow - High Shelf!|10|1|1|0|0|0|0" into line 37 of lvlData
-    put "Love these Candles|10|1|1|0|0|0|0" into line 38 of lvlData
-    put "Windy Room|10|1|1|2|2|0|0" into line 39 of lvlData
+    put "Love these Candles...|10|1|1|0|0|0|0" into line 38 of lvlData
+    put "Windy Room...|10|1|1|2|2|0|0" into line 39 of lvlData
     put "Monty Hall|11|1|0|0|0|0|0" into line 40 of lvlData
     put "" into line 1 of lvlObjects
     put "flrVnt|8|325|69|338|117|44|0|0|table|1|223|186|232|356|0|0|0|flrVnt|8|325|421|338|469|44|0|0|macTsh|" after line 1 of lvlObjects

@@ -12,32 +12,31 @@
 -- cd fld "gameover"
 -- cd btn "glider_spriteslivesicon"
 
+-- script of cd btn "btn_continue":
+
 on mouseup
     global curlevel, state
-    if curlevel is "" then
+    if curlevel is "needreset" then
         initSpriteConstantsAndLoadGameData
         initui
-        put -1 into curlevel
         put "nogame" into state
+        put -1 into curlevel
+        refreshOnLevelChange
+    else if curlevel is "" or curlevel is -1 then
+        initSpriteConstantsAndLoadGameData
+        initui
+        put "nogame" into state
+        put -2 into curlevel
+        refreshOnLevelChange
+    else if curlevel is -2 then
+        startnewgame
+        refreshOnLevelChange
+    else if curlevel is -3 then
+        put "nogame" into state
+        put -1 into curlevel
         refreshOnLevelChange
     end if
-    if the short name of the target is "btn_continue" then
-        if curlevel is "" or curlevel is -1 then
-            initSpriteConstantsAndLoadGameData
-            initui
-            put "nogame" into state
-            put -2 into curlevel
-            refreshOnLevelChange
-        else if curlevel is -2 then
-            startnewgame
-            refreshOnLevelChange
-        else if curlevel is -3 then
-            put "nogame" into state
-            put -1 into curlevel
-            refreshOnLevelChange
-        end if
-    end if
-end if
+end mouseup
 
 on startnewgame
     global cheat_invincible, state, curlevel, sprites_right_forward, sprites_shadoRght, clockcount
@@ -82,13 +81,13 @@ on initui
     set the rect of cd btn "glider_spritesme" to 0,0,48,20
     set the rect of cd btn "glider_spritesshadow" to 0,0,48,20
     
-    put 20 into top
+    put 20 into basey
     put 22 into h
-    set the rect of cd fld "roomname" to 28-26, top-18, 177, h
-    set the rect of cd fld "score" to 245-26, top-18, (245-26)+78, h
-    set the rect of cd fld "behindlives" to 328-26, top-18, (328-26)+207, h
-    set the rect of cd fld "lives" to 395-26, top-18, (395-26)+22, h
-    set the rect of cd btn "glider_spriteslivesicon" to 419-26, top-18, (419-26)+42, h
+    set the rect of cd fld "roomname" to 28-26, basey-18, 177, h
+    set the rect of cd fld "score" to 245-26, basey-18, (245-26)+78, h
+    set the rect of cd fld "behindlives" to 328-26, basey-18, (328-26)+207, h
+    set the rect of cd fld "lives" to 395-26, basey-18, (395-26)+22, h
+    set the rect of cd btn "glider_spriteslivesicon" to 419-26, basey-18, (419-26)+42, h
     set the rect of cd fld "gameover" to 23,23,23+451,23+236
     set the icon of cd btn "glider_spriteslivesicon" to sprites_right_forward
     set the showlabel of cd btn "glider_spriteslivesicon" to false
