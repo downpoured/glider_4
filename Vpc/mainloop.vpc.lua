@@ -21,10 +21,9 @@
 -- 8|extra
 -- 9|isOn
 
-
-function intersectRoomObject curlvldata, curlvlObjects, myrect1, myrect2, myrect3, myrect4
-    global curlevel, lvlObjects, propsperobj
-    put item 2 of curlvldata into numobjects
+function intersectRoomObject myrect1, myrect2, myrect3, myrect4
+    global curlevel, lvlObjects, propsperobj, gcurlvldata, gcurlvlObjects
+    put item 2 of gcurlvldata into numobjects
     put "" into ret
     put left of cd btn "glider_spritesme" into x0
     put top of cd btn "glider_spritesme" into y0
@@ -32,14 +31,14 @@ function intersectRoomObject curlvldata, curlvlObjects, myrect1, myrect2, myrect
     put bottom of cd btn "glider_spritesme" into y1
     repeat with i = 1 to numobjects
         put (propsperobj * (i-1)) into j
-        put  item (j+1) of curlvlObjects into objtypename
+        put  item (j+1) of gcurlvlObjects into objtypename
         if objtypename is "outlet" then
-            mainloopgame_periodic i, curlvldata, curlvlObjects
+            mainloopgame_periodic i
         end if
-        put item (j+3) of curlvlObjects into boxx0
-        put item (j+4) of curlvlObjects into boxy0
-        put item (j+5) of curlvlObjects into boxx1
-        put item (j+6) of curlvlObjects into boxy1
+        put the left of cd btn ("glider_sprites" & i) into boxx0
+        put the top of cd btn ("glider_sprites" & i) into boxy0
+        put the right of cd btn ("glider_sprites" & i) into boxx1
+        put the bottom of cd btn ("glider_sprites" & i) into boxy1
         if (x0 >= boxx1 or y0 >= boxy1)  then
         -- it's way outside on the right or bottom
         else if (x1 < boxx0 or y1 < boxy0)  then
@@ -52,8 +51,8 @@ function intersectRoomObject curlvldata, curlvlObjects, myrect1, myrect2, myrect
 end intersectRoomObject
 
 
-on mainloopgame_motion curlvldata, curlvlObjects
-    global lastdirpressed, curlevel, lvlData
+on mainloopgame_motion
+    global curlevel, propsperobj, dx, dy, gcurlvldata, gcurlvlObjects,lastdirpressed
     global dx, dy
     if dy is "" then
         put 0 into dy
@@ -65,13 +64,13 @@ on mainloopgame_motion curlvldata, curlvlObjects
     end if
     put "" into lastdirpressed
     set the topleft of cd btn "glider_spritesme" to (the left of cd btn "glider_spritesme" + dx), (the top of cd btn "glider_spritesme" + dy)
-    set the topleft of cd btn "glider_spritesshadow" to (the left of cd btn "glider_spritesme" + dx), 320
+    set the topleft of cd btn "glider_spritesshadow" to (the left of cd btn "glider_spritesme"), 320
 end mainloopgame_motion
 
-on mainloopgame_checkbounds curlvldata, curlvlObjects
-    global lastdirpressed, curlevel, lvlData
-    put (item 3 of curlvldata is 1) into leftopen
-    put (item 4 of curlvldata is 1) into rghtopen
+on mainloopgame_checkbounds
+    global curlevel, propsperobj, dx, dy, gcurlvldata, gcurlvlObjects
+    put (item 3 of gcurlvldata is 1) into leftopen
+    put (item 4 of gcurlvldata is 1) into rghtopen
     if the bottom of cd btn "glider_spritesme" > 328 then
         begindeath
         set the bottom of cd btn "glider_spritesme" to 328
@@ -104,10 +103,11 @@ on newlevelbonus
     end if
 end newlevelbonus
 
-on mainloopgame_collisions curlvldata, curlvlObjects
-    global dx, dy, propsperobj
+on mainloopgame_collisions
+    global curlevel, propsperobj, dx, dy, gcurlvldata, gcurlvlObjects
+    global sprites_burnrght1, sprites_outletspark1
     
-    put intersectRoomObject(curlvldata, curlvlObjects, the left of cd btn "glider_spritesme", the top of cd btn "glider_spritesme", the right of cd btn "glider_spritesme", the bottom of cd btn "glider_spritesme") into intersects
+    put intersectRoomObject(gcurlvldata, gcurlvlObjects, the left of cd btn "glider_spritesme", the top of cd btn "glider_spritesme", the right of cd btn "glider_spritesme", the bottom of cd btn "glider_spritesme") into intersects
     put the number of items in intersects into numintersects
     put false into isdead
     
@@ -115,10 +115,11 @@ on mainloopgame_collisions curlvldata, curlvlObjects
     put 6 into dy -- by default, we fall
     repeat with numintersect = 2 to numintersects -- ignore the first
         put item (numintersect) of intersects into i
-        put item (((i-1)*propsperobj)+(1)) of curlvlObjects into objtypename
-        put item (((i-1)*propsperobj)+(7)) of curlvlObjects into amount
-        put item (((i-1)*propsperobj)+(8)) of curlvlObjects into extra
-        put item (((i-1)*propsperobj)+(9)) of curlvlObjects into isOn
+        put item (((i-1)*propsperobj)+(1)) of gcurlvlObjects into objtypename
+        put item (((i-1)*propsperobj)+(7)) of gcurlvlObjects into amount
+        put item (((i-1)*propsperobj)+(8)) of gcurlvlObjects into extra
+        put item (((i-1)*propsperobj)+(9)) of gcurlvlObjects into isOn
+        
         put getCollideResult(objtypename, isOn, amount, extra) into clr
         put item 1 of clr into collideType
         put item 2 of clr into collideAmt
@@ -132,47 +133,60 @@ on mainloopgame_collisions curlvldata, curlvlObjects
         else if collideType is "dropIt" then
             put 12 into dy
         else if collideType is "burnIt" then
-            begindeath
-            set the icon of cd btn "glider_spritesme" to sprites_burnrght1
+            if the bottom of cd btn "glider_spritesme" >= (the bottom of cd btn ("glider_sprites" & i)-30) then
+                begindeath
+                set the icon of cd btn "glider_spritesme" to sprites_burnrght1
+            else
+                put -6 into dy
+            end if
         else if collideType is "turnItLeft" then
-            put -6 into dx
+            put -20 into dx
         else if collideType is "turnItRight" then
-            put 6 into dx
+            put 20 into dx
         else if collideType is "lightIt" then
             -- not yet supported
         else if collideType is "zapIt" then
             if the icon of cd btn ("glider_sprites" & i) is sprites_outletspark1 then
                 begindeath
+                set the icon of cd btn "glider_spritesme" to sprites_burnrght1
             end if
         else if collideType is "airOnIt" then
             -- not yet supported
         else if collideType is "shredIt" then
             begindeath
-        else if collideType is "upStar" then
+        else if collideType is "descendIt" then
             beginloadlevel collideAmt
-        else if collideType is "dnStar" then
+            set the top of cd btn "glider_spritesme" to 20
+            set the left of cd btn "glider_spritesme" to 20
+        else if collideType is "ascendIt" then
             beginloadlevel collideAmt
+            set the top of cd btn "glider_spritesme" to 20
+            set the left of cd btn "glider_spritesme" to 20
         else if collideType is "getitem_extraIt" then
             add 1 to cd fld "lives"
         else if collideType is "getitem_awardIt" then
             add 50 to cd fld "score"
+        else if collideType is "getitem_energizeIt" then
+            add 100 to cd fld "score"
+        else if collideType is "getitem_bandIt" then
+            add 150 to cd fld "score"
         end if
         
         if "getitem_" is in collideType then
             -- hide it since it is gone
-            put 0 into item (((i-1)*propsperobj)+(9)) of curlvlObjects
+            modifyObjectState (((i-1)*propsperobj)+(9)), 0
             hide cd btn ("glider_sprites" & i)
         end if
     end repeat
 end mainloopgame_collisions
 
 
-on mainloopgame_periodic i, curlvldata, curlvlObjects
-    global clockcount, propsperobj, sprites_outlet, sprites_outletspark1
+on mainloopgame_periodic i
+    global clockcount, propsperobj, sprites_outlet, sprites_outletspark1, gcurlvldata, gcurlvlObjects
     add 1 to clockcount
     if clockcount mod 20 is 1 then
         put (propsperobj * (i-1)) into j
-        put item (j+1) of curlvlObjects into objtypename
+        put item (j+1) of gcurlvlObjects into objtypename
         if objtypename is "outlet" then
             if the icon of cd btn ("glider_sprites" & i) is sprites_outletspark1 then
                 set the icon of cd btn ("glider_sprites" & i) to sprites_outlet
@@ -203,7 +217,7 @@ end mainloopdying
 
 on mainlooploadinglevel
     global loadlevelcount, state, curlevel
-    if loadlevelcount < 2 then
+    if loadlevelcount < 3 then
         put loadlevelcount+1 into loadlevelcount
         put "." after cd fld "roomname"
     else
@@ -214,6 +228,11 @@ end mainlooploadinglevel
 
 on beginloadlevel nextlevel
     global loadlevelcount, state, curlevel
+    if nextlevel > curlevel then
+        put 1 into incr
+    else
+        put -1 into incr
+    end if
     put nextlevel into curlevel
     newlevelbonus
     if curlevel < 1 then
@@ -223,28 +242,44 @@ on beginloadlevel nextlevel
     end if
     -- skipped levels we don't yet support
     if curlevel is 7 then
-        put curlevel+1 into curlevel
+        put curlevel+incr into curlevel
     end if
     if curlevel is 13 then
-        put curlevel+1 into curlevel
+        put curlevel+incr into curlevel
     end if
     if curlevel is 28 then
-        put curlevel+1 into curlevel
+        put curlevel+incr into curlevel
     end if
     if curlevel is 29 then
-        put curlevel+1 into curlevel
+        put curlevel+incr into curlevel
     end if
     if curlevel is 37 then
-        put curlevel+1 into curlevel
+        put curlevel+incr into curlevel
     end if
     
-    put 0 into loadlevelcount
-    put "Loading" into cd fld "roomname"
-    put "loadinglevel" into state
+    if curlevel is 26 then
+        -- victory!
+        put -3 into curlevel
+        put "nogame" into state
+        refreshOnLevelChange
+    else
+        put 0 into loadlevelcount
+        put "Loading" into cd fld "roomname"
+        put "loadinglevel" into state
+    end if
 end beginloadlevel
 
 on idle
-    global state
+    global state, curlevel
+    if there is a cd btn "stopall" then
+        answer "stopping all"
+        global curlevel, state
+        put "needreset" into curlevel
+        put "nogame" into state
+        refreshOnLevelChange
+        show cd btn "btn_continue"
+        set the label of cd btn "btn_continue" to "Start Over"
+    end if
     if state is "playing" then
         global curlevel, lvlData, lvlObjects, dx, dy, gcurlvldata, gcurlvlObjects
         -- warning: be careful that we don't warp through a solid object.
@@ -252,9 +287,9 @@ on idle
         -- a solid object that is only 6 pixels wide
         put 0 into dx
         put 0 into dy
-        mainloopgame_collisions gcurlvldata, gcurlvlObjects
-        mainloopgame_checkbounds gcurlvldata, gcurlvlObjects
-        mainloopgame_motion gcurlvldata, gcurlvlObjects
+        mainloopgame_collisions
+        mainloopgame_checkbounds
+        mainloopgame_motion
     else if state is "dying" then
         mainloopdying
     else if state is "loadinglevel" then
@@ -275,6 +310,9 @@ on afterkeydown
         else
             put true into cheat_invincible
         end if
+    else if keyChar() is "L" and shiftKey() and not keyrepeated() then
+        answer "cheatcode:new life"
+        add 1 to cd fld "lives"
     else if keyChar() is "N" and shiftKey() and not keyrepeated() then
         global curlevel, state
         put "needreset" into curlevel
@@ -284,6 +322,14 @@ on afterkeydown
         set the label of cd btn "btn_continue" to "Start Over"
     end if
 end afterkeydown
+
+on modifyObjectState itemnumber, newvalue
+    global curlevel, gcurlvldata, gcurlvlObjects, lvlData, lvlObjects
+    -- modify cached for this level
+    put newvalue into item (itemnumber) of gcurlvlObjects
+    -- modify global state
+    put gcurlvlObjects into line (curlevel) of lvlObjects
+end modifyObjectState
 
 on begindeath
     global state, deathcount, sprites_alldeadrght, cheat_invincible
@@ -296,10 +342,6 @@ end begindeath
 
 on refreshOnLevelChange
     global curlevel, gcurlvldata, gcurlvlObjects, lvlData, lvlObjects
-    if curlevel is not "needreset" and curlevel >= 1 then
-        put line (curlevel) of lvlData into gcurlvldata
-        put line (curlevel) of lvlObjects into gcurlvlObjects
-    end if
     
     repeat with x=1 to 16
         hide cd btn ("glider_sprites" & x)
@@ -376,6 +418,9 @@ on refreshOnLevelChange
         global curlevel, lvlData, lvlObjects, dx, dy, propsperobj
         put line (curlevel) of lvlData into curlvldata
         put item 1 of curlvldata into cd fld "roomname"
+        if cd fld "roomname" is "Welcome..." then
+            put "Across the room..." into cd fld "roomname"
+        end if
         
         -- actually load the room's objects
         put line (curlevel) of lvlObjects into curlvlObjects
@@ -386,11 +431,21 @@ on refreshOnLevelChange
             put item (j+4) of curlvlObjects into spritey0
             put item (j+5) of curlvlObjects into spritex1
             put item (j+6) of curlvlObjects into spritey1
-            set the rect of cd btn ("glider_sprites" & i) to spritex0, spritey0, spritex1, spritey1
+            if spritex0 is "" then
+                answer (i && j && curlvlObjects)
+            end if
+            set the rect of cd btn ("glider_sprites" & i) to spritex0, spritey0, max(1,spritex1), max(1,spritey1)
             set the icon of cd btn ("glider_sprites" & i) to 0 -- invisible by default
-            show cd btn ("glider_sprites" & i)
             put item (j+1) of curlvlObjects into objtypename
             put item (j+7) of curlvlObjects into amount
+            put item (j+9) of curlvlObjects into isOn
+            if isOn is 1 then
+                show cd btn ("glider_sprites" & i)
+--~                 set the style of cd btn ("glider_sprites" & i) to "rectangle"
+            else
+                hide cd btn ("glider_sprites" & i)
+            end if
+            
             if objtypename is "flrVnt" then
                 set the icon of cd btn ("glider_sprites" & i) to sprites_ventpatterny
                 -- the event rect is different than the sprite rect. see tempInt := (boundRect.right + boundRect.left) div 2;
@@ -409,11 +464,15 @@ on refreshOnLevelChange
             else if objtypename is "ritFan" then
                 set the rect of cd btn ("glider_sprites" & i) to spritex1, spritey0 + 10, amount, spritey0 + 30
             else if objtypename is "guitar" then
-                set the rect of cd btn ("glider_sprites" & i) to spritex0+36, spritey0 + 24, spritex0+38, spritey1 -56
+--~                 set the rect of cd btn ("glider_sprites" & i) to spritex0+36, spritey0 + 24, spritex0+38, spritey1 -56
             else if objtypename is "upStar" then
                 set the rect of cd btn ("glider_sprites" & i) to spritex0 + 32, spritey0, spritex1 - 32, spritey0 + 8
+                set the height of cd btn  ("glider_sprites" & i) to 70+the height of cd btn  ("glider_sprites" & i)
+                set the top of cd btn  ("glider_sprites" & i) to -30+the top of cd btn  ("glider_sprites" & i)
             else if objtypename is "dnStar" then
                 set the rect of cd btn ("glider_sprites" & i) to spritex0 + 32, spritey1 - 8, spritex1 - 32, spritey1
+                set the height of cd btn  ("glider_sprites" & i) to 60+the height of cd btn  ("glider_sprites" & i)
+                set the top of cd btn  ("glider_sprites" & i) to -30+the top of cd btn  ("glider_sprites" & i)
             else if objtypename is "candle" then
                 put round((spritex0 + spritex1)/2) into tempInt
 				set the rect of cd btn ("glider_sprites" & i) to tempInt - 12, amount, tempInt + 4, spritey0
@@ -457,5 +516,10 @@ on refreshOnLevelChange
             set the width of cd btn ("glider_sprites" & i) to q + the width of cd btn ("glider_sprites" & i)
             set the height of cd btn ("glider_sprites" & i) to q + the height of cd btn ("glider_sprites" & i)
         end repeat
+    end if
+    
+    if curlevel is not "needreset" and curlevel >= 1 then
+        put line (curlevel) of lvlData into gcurlvldata
+        put line (curlevel) of lvlObjects into gcurlvlObjects
     end if
 end refreshOnLevelChange

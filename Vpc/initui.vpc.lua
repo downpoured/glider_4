@@ -39,7 +39,7 @@ end mouseup
 
 on startnewgame
     global cheat_invincible, state, curlevel, sprites_right_forward, sprites_shadoRght, clockcount
-    global lastdirpressed, dy
+    global lastdirpressed, dy, propsperobj
     global levelsseen
     initSpriteConstantsAndLoadGameData
     put false into cheat_invincible
@@ -57,6 +57,22 @@ on startnewgame
     put 1 into line 1 of levelsseen
     put 0 into dy
     put 0 into clockcount
+    set the itemdelimiter to "|"    
+    put 9 into propsperobj
+    
+    global lvlData, lvlObjects
+    -- turn on all objects in all levels...change this later.
+    repeat with lv = 1 to 40
+        put line (lv) of lvlData into curlvlData
+        put line (lv) of lvlObjects into curlvlObjects
+        put item 2 of curlvlData into numobjects
+        repeat with i = 1 to numobjects
+            put (propsperobj * (i-1))  into j
+            put line (lv) of lvlObjects into tmp
+            put 1 into item (j+9) of tmp
+            put tmp into line (lv) of lvlObjects
+        end repeat
+    end repeat
 end startnewgame
 
 on initui
