@@ -92,8 +92,8 @@ on initui
     set the rect of cd fld "roomname" to 28-26, basey-18, 177, h
     set the rect of cd fld "score" to 245-26, basey-18, (245-26)+78, h
     set the rect of cd fld "behindlives" to 328-26, basey-18, (328-26)+207, h
-    set the rect of cd fld "lives" to 395-26, basey-18, (395-26)+22, h
-    set the rect of cd btn "glider_spriteslivesicon" to 419-26, basey-18, (419-26)+42, h
+    set the rect of cd fld "lives" to (395-26), basey+3-18, (395-26)+22, h
+    set the rect of cd btn "glider_spriteslivesicon" to 419-26, (basey-18)-2, (419-26)+42, h
     set the rect of cd fld "gameover" to 23,23,23+451,23+236
     set the icon of cd btn "glider_spriteslivesicon" to sprites_right_forward
     set the showlabel of cd btn "glider_spriteslivesicon" to false
@@ -106,7 +106,8 @@ on initui
     
     repeat with x=1 to 16
         hide cd btn ("glider_sprites" & x)
-        set the style of cd btn ("glider_sprites" & x) to "transparent"
+--~         set the style of cd btn ("glider_sprites" & x) to "transparent"
+        set the style of cd btn ("glider_sprites" & x) to "rectangle"
         set the showlabel of cd btn ("glider_sprites" & x)  to false
         set the autohilite of cd btn ("glider_sprites" & x)  to false
         set the icon of cd btn ("glider_sprites" & x) to 0
