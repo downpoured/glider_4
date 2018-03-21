@@ -1,6 +1,6 @@
 
 on initSpriteConstants
-    global sprites_shadoRght, sprites_shadoLft, sprites_right_forward, sprites_right_tipped, sprites_left_forward, sprites_left_tipped, sprites_turn_endpoint, sprites_right_forward2, sprites_right_tipped2, sprites_left_forward2, sprites_left_tipped2, sprites_turn_endpoint2, sprites_burnrght1, sprites_burnrght2, sprites_burnlft1, sprites_burnlft2, sprites_celVnt, sprites_celDct, sprites_flrVnt, sprites_paper, sprites_toastr, sprites_toast1, sprites_toast2, sprites_toast3, sprites_toast4, sprites_toast5, sprites_toast6, sprites_teaKtl, sprites_lftFan, sprites_ritFan, sprites_table, sprites_shredr, sprites_books, sprites_clock, sprites_candle, sprites_rbrBnd, sprites_ball, sprites_fshBwl, sprites_fish1, sprites_fish2, sprites_fish3, sprites_fish4, sprites_grease, sprites_greasefall1, sprites_greasefall2, sprites_litSwt, sprites_thermo, sprites_outlet, sprites_outletspark1, sprites_outletspark2, sprites_pwrSwt, sprites_guitar, sprites_drip, sprites_shelf, sprites_basket, sprites_paintg, sprites_battry, sprites_macTsh, sprites_upStar, sprites_dnStar, sprites_candleflame1, sprites_candleflame2, sprites_candleflame3, sprites_drop1, sprites_drop2, sprites_drop3, sprites_drop4, sprites_drop5
+    global sprites_shadoRght, sprites_shadoLft, sprites_right_forward, sprites_right_tipped, sprites_left_forward, sprites_left_tipped, sprites_turn_endpoint, sprites_right_forward2, sprites_right_tipped2, sprites_left_forward2, sprites_left_tipped2, sprites_turn_endpoint2, sprites_burnrght1, sprites_burnrght2, sprites_burnlft1, sprites_burnlft2, sprites_alldeadrght, sprites_alldeadlft, sprites_celVnt, sprites_celDct, sprites_flrVnt, sprites_paper, sprites_toastr, sprites_toast1, sprites_toast2, sprites_toast3, sprites_toast4, sprites_toast5, sprites_toast6, sprites_teaKtl, sprites_lftFan, sprites_ritFan, sprites_table, sprites_shredr, sprites_books, sprites_clock, sprites_candle, sprites_rbrBnd, sprites_ball, sprites_fshBwl, sprites_fish1, sprites_fish2, sprites_fish3, sprites_fish4, sprites_grease, sprites_greasefall1, sprites_greasefall2, sprites_litSwt, sprites_thermo, sprites_outlet, sprites_outletspark1, sprites_outletspark2, sprites_pwrSwt, sprites_guitar, sprites_drip, sprites_shelf, sprites_basket, sprites_paintg, sprites_battry, sprites_macTsh, sprites_upStar, sprites_dnStar, sprites_candleflame1, sprites_candleflame2, sprites_candleflame3, sprites_drop1, sprites_drop2, sprites_drop3, sprites_drop4, sprites_drop5, 
     put 1 into sprites_shadoRght
     put 2 into sprites_shadoLft
     put 3 into sprites_right_forward
@@ -17,59 +17,62 @@ on initSpriteConstants
     put 14 into sprites_burnrght2
     put 15 into sprites_burnlft1
     put 16 into sprites_burnlft2
-    put 17 into sprites_celVnt
-    put 18 into sprites_celDct
-    put 19 into sprites_flrVnt
-    put 20 into sprites_paper
-    put 21 into sprites_toastr
-    put 22 into sprites_toast1
-    put 23 into sprites_toast2
-    put 24 into sprites_toast3
-    put 25 into sprites_toast4
-    put 26 into sprites_toast5
-    put 27 into sprites_toast6
-    put 28 into sprites_teaKtl
-    put 29 into sprites_lftFan
-    put 30 into sprites_ritFan
-    put 31 into sprites_table
-    put 32 into sprites_shredr
-    put 33 into sprites_books
-    put 34 into sprites_clock
-    put 35 into sprites_candle
-    put 36 into sprites_rbrBnd
-    put 37 into sprites_ball
-    put 38 into sprites_fshBwl
-    put 39 into sprites_fish1
-    put 40 into sprites_fish2
-    put 41 into sprites_fish3
-    put 42 into sprites_fish4
-    put 43 into sprites_grease
-    put 44 into sprites_greasefall1
-    put 45 into sprites_greasefall2
-    put 46 into sprites_litSwt
-    put 47 into sprites_thermo
-    put 48 into sprites_outlet
-    put 49 into sprites_outletspark1
-    put 50 into sprites_outletspark2
-    put 51 into sprites_pwrSwt
-    put 52 into sprites_guitar
-    put 53 into sprites_drip
-    put 54 into sprites_shelf
-    put 55 into sprites_basket
-    put 56 into sprites_paintg
-    put 57 into sprites_battry
-    put 58 into sprites_macTsh
-    put 59 into sprites_upStar
-    put 60 into sprites_dnStar
-    put 61 into sprites_candleflame1
-    put 62 into sprites_candleflame2
-    put 63 into sprites_candleflame3
-    put 64 into sprites_drop1
-    put 65 into sprites_drop2
-    put 66 into sprites_drop3
-    put 67 into sprites_drop4
-    put 68 into sprites_drop5
+    put 17 into sprites_alldeadrght
+    put 18 into sprites_alldeadlft
+    put 19 into sprites_celVnt
+    put 20 into sprites_celDct
+    put 21 into sprites_flrVnt
+    put 22 into sprites_paper
+    put 23 into sprites_toastr
+    put 24 into sprites_toast1
+    put 25 into sprites_toast2
+    put 26 into sprites_toast3
+    put 27 into sprites_toast4
+    put 28 into sprites_toast5
+    put 29 into sprites_toast6
+    put 30 into sprites_teaKtl
+    put 31 into sprites_lftFan
+    put 32 into sprites_ritFan
+    put 33 into sprites_table
+    put 34 into sprites_shredr
+    put 35 into sprites_books
+    put 36 into sprites_clock
+    put 37 into sprites_candle
+    put 38 into sprites_rbrBnd
+    put 39 into sprites_ball
+    put 40 into sprites_fshBwl
+    put 41 into sprites_fish1
+    put 42 into sprites_fish2
+    put 43 into sprites_fish3
+    put 44 into sprites_fish4
+    put 45 into sprites_grease
+    put 46 into sprites_greasefall1
+    put 47 into sprites_greasefall2
+    put 48 into sprites_litSwt
+    put 49 into sprites_thermo
+    put 50 into sprites_outlet
+    put 51 into sprites_outletspark1
+    put 52 into sprites_outletspark2
+    put 53 into sprites_pwrSwt
+    put 54 into sprites_guitar
+    put 55 into sprites_drip
+    put 56 into sprites_shelf
+    put 57 into sprites_basket
+    put 58 into sprites_paintg
+    put 59 into sprites_battry
+    put 60 into sprites_macTsh
+    put 61 into sprites_upStar
+    put 62 into sprites_dnStar
+    put 63 into sprites_candleflame1
+    put 64 into sprites_candleflame2
+    put 65 into sprites_candleflame3
+    put 66 into sprites_drop1
+    put 67 into sprites_drop2
+    put 68 into sprites_drop3
+    put 69 into sprites_drop4
+    put 70 into sprites_drop5
     
+    global lvlData, lvlObjects
     put "Welcome...|5|0|1|0|0|0|0" into line 1 of lvlData
     put "Top of the reading list|7|1|1|0|0|0|0" into line 2 of lvlData
     put "Under Me!|5|1|1|0|0|0|0" into line 3 of lvlData
