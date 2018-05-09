@@ -56,10 +56,16 @@ on startNewGame
     put 3 into cd fld "lives"
     put 0 into cd fld "score"
     put 1 into curLevel
-    set the icon of cd btn "gliderSpritesMe" to spritesRightForward
-    set the icon of cd btn "gliderSpritesShadow" to spriteShadoRght
-    set the topLeft of cd btn "gliderSpritesMe" to 20, 20
-    set the topLeft of cd btn "gliderSpritesShadow" to -400, -400
+    
+    set the icon of cd btn "gliderSpritesMe" to \
+        spritesRightForward
+    set the icon of cd btn "gliderSpritesShadow" to \
+        spriteShadoRght
+    set the topLeft of cd btn "gliderSpritesMe" to \
+        20, 20
+    set the topLeft of cd btn "gliderSpritesShadow" to \
+        -400, -400
+    
     put "" into lastDirPressed
     put "" into levelsSeen
     put 1 into line 1 of levelsSeen
@@ -94,34 +100,57 @@ on initUI
     set the style of cd fld "score" to "shadow"
     set the style of cd fld "behindLives" to "shadow"
     set the style of cd fld "lives" to "transparent"
-    set the style of cd btn "gliderSpritesLivesIcn" to "transparent"
-    set the style of cd fld "gameOver" to "shadow"
-    set the defaultTextFont of cd fld "gameOver" to "times"
-    set the defaultTextSize of cd fld "gameOver" to "18"
+    set the style of cd btn "gliderSpritesLivesIcn" to \
+        "transparent"
+    set the style of cd fld "gameOver" to \
+        "shadow"
+    set the defaultTextFont of cd fld "gameOver" to \
+        "times"
+    set the defaultTextSize of cd fld "gameOver" to \
+        "18"
     set the textAlign of cd fld "gameOver" to "center"
     
-    put 1 into q -- need to tweak the rect of everything larger, to make the sprite show up
+    put 1 into q 
+    -- need to tweak the rect of everything larger, 
+    -- to make the sprite show up
     
-    set the style of cd btn "gliderBg0" to "transparent"
-    set the style of cd btn "gliderSpritesMe" to "transparent"
-    set the style of cd btn "gliderSpritesShadow" to "transparent"
-    set the showLabel of cd btn "gliderBg0" to false
-    set the showLabel of cd btn "gliderSpritesMe" to false
-    set the showLabel of cd btn "gliderSpritesShadow" to false
-    set the rect of cd btn "gliderBg0" to -3, -1, 515, 345
-    set the rect of cd btn "gliderSpritesMe" to 0,0,48+q,20+q
-    set the rect of cd btn "gliderSpritesShadow" to 0,0,48+q,20+q
+    set the style of cd btn "gliderBg0" to \
+        "transparent"
+    set the style of cd btn "gliderSpritesMe" to \
+        "transparent"
+    set the style of cd btn "gliderSpritesShadow" to \
+        "transparent"
+    set the showLabel of cd btn "gliderBg0" to \
+        false
+    set the showLabel of cd btn "gliderSpritesMe" to \
+        false
+    set the showLabel of cd btn "gliderSpritesShadow" to \
+        false
+    set the rect of cd btn "gliderBg0" to \
+        -3, -1, 515, 345
+    set the rect of cd btn "gliderSpritesMe" to \
+        0,0,48+q,20+q
+    set the rect of cd btn "gliderSpritesShadow" to \
+        0,0,48+q,20+q
     
     put 20 into basey
     put 22 into h
-    set the rect of cd fld "roomName" to 28-26, basey-18, 177, h
-    set the rect of cd fld "score" to 245-26, basey-18, (245-26)+78, h
-    set the rect of cd fld "behindLives" to 328-26, basey-18, (328-26)+207, h
-    set the rect of cd fld "lives" to (395-26), basey+3-18, (395-26)+22, h
-    set the rect of cd btn "gliderSpritesLivesIcn" to 419-26, (basey-18)-2, (419-26)+42, h
-    set the rect of cd fld "gameOver" to 23,23,23+451,23+236
-    set the icon of cd btn "gliderSpritesLivesIcn" to spritesRightForward
-    set the showLabel of cd btn "gliderSpritesLivesIcn" to false
+    set the rect of cd fld "roomName" to \
+        28-26, basey-18, 177, h
+    set the rect of cd fld "score" to \
+        245-26, basey-18, (245-26)+78, h
+    set the rect of cd fld "behindLives" to \
+        328-26, basey-18, (328-26)+207, h
+    set the rect of cd fld "lives" to \
+        (395-26), basey+3-18, (395-26)+22, h
+    set the rect of cd btn "gliderSpritesLivesIcn" to \
+        419-26, (basey-18)-2, (419-26)+42, h
+    set the rect of cd fld "gameOver" to \
+        23,23,23+451,23+236
+    set the icon of cd btn "gliderSpritesLivesIcn" to \
+        spritesRightForward
+    set showLabel of cd btn "gliderSpritesLivesIcn" to \
+        false
     
     play "glider_1_Aww" load
     play "glider_1_BeamIn" load
@@ -132,9 +161,9 @@ on initUI
     play "glider_1_Guitar" load
     play "glider_1_Zap" load
     
-    set the defaultTextFont of cd fld "roomName" to "chicago" 
-    set the defaultTextFont of cd fld "score" to "chicago" 
-    set the defaultTextFont of cd fld "lives" to "chicago" 
+    set defaultTextFont of cd fld "roomName" to "chicago" 
+    set defaultTextFont of cd fld "score" to "chicago" 
+    set defaultTextFont of cd fld "lives" to "chicago" 
     set the lockText of cd fld "roomName" to true 
     set the lockText of cd fld "score" to true 
     set the lockText of cd fld "lives" to true 
@@ -143,14 +172,17 @@ on initUI
     
     repeat with x = 1 to 16
         hide cd btn ("gliderSprites" & x)
-        set the style of cd btn ("gliderSprites" & x) to "transparent"
-        set the showLabel of cd btn ("gliderSprites" & x)  to false
-        set the autoHilite of cd btn ("gliderSprites" & x)  to false
-        set the icon of cd btn ("gliderSprites" & x) to 0
+        set style of cd btn ("gliderSprites" & x) to \
+            "transparent"
+        set showLabel of cd btn ("gliderSprites" & x) to \
+            false
+        set autoHilite of cd btn ("gliderSprites"& x) to \
+            false
+        set icon of cd btn ("gliderSprites" & x) to \
+            0
     end repeat
     
     set the style of cd btn "btnContinue" to "osdefault"
     put -1 into curLevel
     refreshOnLevelChange
 end initUI
-

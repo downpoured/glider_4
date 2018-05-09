@@ -29,8 +29,11 @@
 -- item 8:  extra
 -- item 9:  isOn
 
-function intersectRoomObject meRect1, meRect2, meRect3, meRect4
-    global curLevel, lvlObjects, propsPerObj, gCurLvlData, gCurLvlObjects
+function intersectRoomObject meRect1, meRect2, \
+    meRect3, meRect4
+    global curLevel, lvlObjects, propsPerObj
+    global gCurLvlData, gCurLvlObjects
+    
     put item 2 of gCurLvlData into numObjects
     put "" into ret
     put the left of cd btn "gliderSpritesMe" into x0
@@ -44,10 +47,15 @@ function intersectRoomObject meRect1, meRect2, meRect3, meRect4
             mainLoopOutletSpark i
         end if
         
-        put the left of cd btn ("gliderSprites" & i) into boxX0
-        put the top of cd btn ("gliderSprites" & i) into boxY0
-        put the right of cd btn ("gliderSprites" & i) into boxX1
-        put the bottom of cd btn ("gliderSprites" & i) into boxY1
+        put the left of cd btn ("gliderSprites" & i) \
+            into boxX0
+        put the top of cd btn ("gliderSprites" & i) \
+            into boxY0
+        put the right of cd btn ("gliderSprites" & i) \
+            into boxX1
+        put the bottom of cd btn ("gliderSprites" & i) \
+            into boxY1
+        
         if (x0 >= boxX1 or y0 >= boxY1)  then
             -- it's way outside on the right or bottom
         else if (x1 < boxX0 or y1 < boxY0)  then
@@ -60,7 +68,8 @@ function intersectRoomObject meRect1, meRect2, meRect3, meRect4
 end intersectRoomObject
 
 on mainLoopMotion
-    global curLevel, propsPerObj, dx, dy, gCurLvlData, gCurLvlObjects, lastDirPressed
+    global curLevel, propsPerObj, dx, dy, 
+    global gCurLvlData, gCurLvlObjects, lastDirPressed
     if dy is "" then
         put 0 into dy
     end if
@@ -71,34 +80,40 @@ on mainLoopMotion
     end if
     
     put "" into lastDirPressed
-    set the topLeft of cd btn "gliderSpritesMe" to (the left of cd btn "gliderSpritesMe" + dx), (the top of cd btn "gliderSpritesMe" + dy)
-    set the topLeft of cd btn "gliderSpritesShadow" to (the left of cd btn "gliderSpritesMe"), 320
+    set the topLeft of cd btn "gliderSpritesMe" to \
+        (the left of cd btn "gliderSpritesMe" + dx), \
+        (the top of cd btn "gliderSpritesMe" + dy)
+    
+    set the topLeft of cd btn "gliderSpritesShadow" to \
+        (the left of cd btn "gliderSpritesMe"), 320
 end mainLoopMotion
 
 on mainLoopCheckBounds
-    global curLevel, propsPerObj, dx, dy, gCurLvlData, gCurLvlObjects
+    global curLevel, propsPerObj, dx, dy
+    global gCurLvlData, gCurLvlObjects
     put (item 3 of gCurLvlData is 1) into canGoRoomLeft
     put (item 4 of gCurLvlData is 1) into canGoRoomRght
     if the bottom of cd btn "gliderSpritesMe" > 328 then
         beginDeath
-        set the bottom of cd btn "gliderSpritesMe" to 328
+        set bottom of cd btn "gliderSpritesMe" to 328
     else if the top of cd btn "gliderSpritesMe" < 30 then
-        set the top of cd btn "gliderSpritesMe" to 30
+        set top of cd btn "gliderSpritesMe" to 30
     end if
     
     if the left of cd btn "gliderSpritesMe" <= 0 then
         if canGoRoomLeft then
             beginLoadLevel curLevel - 1
-            set the left of cd btn "gliderSpritesMe" to 450
+            set left of cd btn "gliderSpritesMe" to 450
         else
-            set the left of cd btn "gliderSpritesMe" to 0
+            set left of cd btn "gliderSpritesMe" to 0
         end if
-    else if the right of cd btn "gliderSpritesMe" >= 511 then
+    else if the right of cd btn "gliderSpritesMe" \
+        >= 511 then
         if canGoRoomRght then
             beginLoadLevel curLevel + 1
-            set the left of cd btn "gliderSpritesMe" to 20
+            set left of cd btn "gliderSpritesMe" to 20
         else
-            set the right of cd btn "gliderSpritesMe" to 511
+            set right of cd btn "gliderSpritesMe" to 511
         end if
     end if
 end mainLoopCheckBounds
@@ -106,29 +121,47 @@ end mainLoopCheckBounds
 on newLvlBonus
     global levelsSeen, curLevel
     if line curLevel of levelsSeen is "" then
-        put "1" into line (curLevel) of levelsSeen
+        put "1" into line curLevel of levelsSeen
         add 200 to cd fld "score"
     end if
 end newLvlBonus
 
 on mainLoopCollide
-    global curLevel, propsPerObj, dx, dy, gCurLvlData, gCurLvlObjects
+    global curLevel, propsPerObj, dx, dy
+    global gCurLvlData, gCurLvlObjects
     global spritesBurnRght1, spritesOutletSpark1
     
-    put intersectRoomObject(gCurLvlData, gCurLvlObjects, the left of cd btn "gliderSpritesMe", the top of cd btn "gliderSpritesMe", the right of cd btn "gliderSpritesMe", the bottom of cd btn "gliderSpritesMe") into intersects
-    put the number of items in intersects into numintersects
+    put intersectRoomObject(gCurLvlData, gCurLvlObjects, \
+        the left of cd btn "gliderSpritesMe", \
+        the top of cd btn "gliderSpritesMe", \
+        the right of cd btn "gliderSpritesMe", \
+        the bottom of cd btn "gliderSpritesMe") \
+        into intersects
+    
+    put the number of items in intersects into \
+        numIntersects
+    
     put false into isdead
     
+    -- by default, we fall 6 pixels
     put 0 into dx 
-    put 6 into dy -- by default, we fall 6 pixels
-    repeat with numintersect = 2 to numintersects -- ignore the first
-        put item numintersect of intersects into i
-        put item ((i-1)*propsPerObj+1) of gCurLvlObjects into objTypeName
-        put item ((i-1)*propsPerObj+7) of gCurLvlObjects into amount
-        put item ((i-1)*propsPerObj+8) of gCurLvlObjects into extra
-        put item ((i-1)*propsPerObj+9) of gCurLvlObjects into isOn
+    put 6 into dy
+    
+    -- ignore the first item of intersects
+    repeat with numIntersect = 2 to numIntersects 
+        put item numIntersect of intersects into i
+        put item ((i-1)*propsPerObj+1) of \
+            gCurLvlObjects into objTypeName
+        put item ((i-1)*propsPerObj+7) of \
+            gCurLvlObjects into amount
+        put item ((i-1)*propsPerObj+8) of \
+            gCurLvlObjects into extra
+        put item ((i-1)*propsPerObj+9) of \
+            gCurLvlObjects into isOn
         
-        put getCollideResult(objTypeName, isOn, amount, extra) into clr
+        put getCollideResult(objTypeName, isOn, \
+            amount, extra) into clr
+        
         put item 1 of clr into collideType
         put item 2 of clr into collideAmt
         
@@ -141,9 +174,12 @@ on mainLoopCollide
         else if collideType is "dropIt" then
             put 12 into dy
         else if collideType is "burnIt" then
-            if the bottom of cd btn "gliderSpritesMe" >= (the bottom of cd btn ("gliderSprites" & i)-30) then
+            if bottom of cd btn "gliderSpritesMe" \
+                >= (bottom of cd btn \
+                    ("gliderSprites" & i) - 30) then
                 beginDeath
-                set the icon of cd btn "gliderSpritesMe" to spritesBurnRght1
+                set the icon of cd btn "gliderSpritesMe" \
+                    to spritesBurnRght1
             else
                 put -6 into dy
             end if
@@ -154,9 +190,11 @@ on mainLoopCollide
         else if collideType is "lightIt" then
             -- not yet supported
         else if collideType is "zapIt" then
-            if the icon of cd btn ("gliderSprites" & i) is spritesOutletSpark1 then
+            if the icon of cd btn ("gliderSprites" & i) \
+                is spritesOutletSpark1 then
                 beginDeath
-                set the icon of cd btn "gliderSpritesMe" to spritesBurnRght1
+                set the icon of cd btn "gliderSpritesMe" \
+                    to spritesBurnRght1
             end if
         else if collideType is "airOnIt" then
             -- not yet supported
@@ -164,12 +202,12 @@ on mainLoopCollide
             beginDeath
         else if collideType is "descendIt" then
             beginLoadLevel collideAmt
-            set the top of cd btn "gliderSpritesMe" to 20
-            set the left of cd btn "gliderSpritesMe" to 20
+            set top of cd btn "gliderSpritesMe" to 20
+            set left of cd btn "gliderSpritesMe" to 20
         else if collideType is "ascendIt" then
             beginLoadLevel collideAmt
-            set the top of cd btn "gliderSpritesMe" to 20
-            set the left of cd btn "gliderSpritesMe" to 20
+            set top of cd btn "gliderSpritesMe" to 20
+            set left of cd btn "gliderSpritesMe" to 20
         else if collideType is "getitem_extraIt" then
             add 1 to cd fld "lives"
         else if collideType is "getitem_awardIt" then
@@ -182,32 +220,43 @@ on mainLoopCollide
         
         if "getitem_" is in collideType then
             -- hide it since it is gone
-            modifyObjectState (((i-1)*propsPerObj) + 9), 0
+            modifyObjectState (((i-1)*propsPerObj) + 9) \
+                , 0
+            
             hide cd btn ("gliderSprites" & i)
         end if
     end repeat
 end mainLoopCollide
 
 on mainLoopOutletSpark i
-    global clockCount, propsPerObj, spritesOutlet, spritesOutletSpark1, gCurLvlData, gCurLvlObjects
+    global clockCount, propsPerObj, spritesOutlet, 
+    global spritesOutletSpark1
+    global gCurLvlData, gCurLvlObjects
+    
     add 1 to clockCount
     if clockCount mod 20 is 1 then
         put (propsPerObj * (i-1)) into j
         put item (j+1) of gCurLvlObjects into objTypeName
         if objTypeName is "outlet" then
-            if the icon of cd btn ("gliderSprites" & i) is spritesOutletSpark1 then
-                set the icon of cd btn ("gliderSprites" & i) to spritesOutlet
+            if the icon of cd btn \
+                ("gliderSprites" & i) is \
+                    spritesOutletSpark1 then
+                set icon of cd btn ("gliderSprites" & i) \
+                    to spritesOutlet
             else
-                set the icon of cd btn ("gliderSprites" & i) to spritesOutletSpark1
+                set icon of cd btn ("gliderSprites" & i) \
+                    to spritesOutletSpark1
             end if
         end if
     end if
 end mainLoopOutletSpark
 
 on mainLoopDying
-    global deathCount, state, curLevel, spritesRightForward
+    global deathCount, state, curLevel
+    global spritesRightForward
     
-    -- use deathCount to intentionally delay the transition from alive to dead
+    -- use deathCount to intentionally delay the 
+    -- transition from alive to dead
     if deathCount < 30 then
         put deathCount + 1 into deathCount
     else
@@ -217,8 +266,10 @@ on mainLoopDying
             put -3 into curLevel
             refreshOnLevelChange
         else
-            set the topLeft of cd btn "gliderSpritesMe" to 20,20
-            set the icon of cd btn "gliderSpritesMe" to spritesRightForward
+            set the topLeft of cd btn "gliderSpritesMe" \
+                to 20,20
+            set the icon of cd btn "gliderSpritesMe" \
+                to spritesRightForward
             put "playing" into state
             play "glider_1_BeamIn"
         end if
@@ -228,7 +279,8 @@ end mainLoopDying
 on mainLoopLoadingLevel
     global loadLevelCount, state, curLevel
     
-    -- use loadLevelCount to intentionally delay the transition between levels
+    -- use loadLevelCount to intentionally delay the 
+    -- transition between levels
     if loadLevelCount < 3 then
         put loadLevelCount+1 into loadLevelCount
         put "." after cd fld "roomName"
@@ -294,14 +346,21 @@ on idle
         put "gameInactive" into state
         refreshOnLevelChange
         show cd btn "btnContinue"
-        set the label of cd btn "btnContinue" to "Start Over"
+        set the label of cd btn "btnContinue" to \
+            "Start Over"
     end if
     
     if state is "playing" then
-        global curLevel, lvlData, lvlObjects, dx, dy, gCurLvlData, gCurLvlObjects
-        -- warning: be careful that we don't warp through a solid object.
-        -- for example, if you are moving at 12 pixels per update, and your height is 5 pixels, it's possible to completely slip through
+        global curLevel, lvlData, lvlObjects, dx, dy
+        global gCurLvlData, gCurLvlObjects
+        
+        -- be careful that we don't warp through 
+        -- a solid object.
+        -- for example, if you are moving at 12 pixels
+        -- per update, and your height is 5 pixels, 
+        -- it's possible to completely slip through
         -- a solid object that is only 6 pixels wide
+        
         put 0 into dx
         put 0 into dy
         mainLoopCollide
@@ -323,47 +382,57 @@ on afterKeyDown
         put "-1" into lastDirPressed
     else if keychar() is "ArrowRight" then
         put "1" into lastDirPressed
-    else if keyChar() is "I" and shiftKey() and not keyRepeated() then
+    else if keyChar() is "I" and shiftKey() and \
+        not keyRepeated() then
         answer "toggle cheatcode:invincible"
         if cheatInvincible is true then
             put false into cheatInvincible
         else
             put true into cheatInvincible
         end if
-    else if keyChar() is "L" and shiftKey() and not keyRepeated() then
+    else if keyChar() is "L" and shiftKey() and \
+        not keyRepeated() then
         answer "cheatcode:new life"
         add 1 to cd fld "lives"
-    else if keyChar() is "N" and shiftKey() and not keyRepeated() then
+    else if keyChar() is "N" and shiftKey() and \
+        not keyRepeated() then
         global curLevel, state
         put "needReset" into curLevel
         put "gameInactive" into state
         refreshOnLevelChange
         show cd btn "btnContinue"
-        set the label of cd btn "btnContinue" to "Start Over"
+        set the label of cd btn "btnContinue" \
+            to "Start Over"
     end if
 end afterKeyDown
 
 on modifyObjectState itemNumber, newValue
-    global curLevel, gCurLvlData, gCurLvlObjects, lvlData, lvlObjects
+    global curLevel, gCurLvlData, gCurLvlObjects
+    global lvlData, lvlObjects
     
     -- modify cached for this level
-    put newValue into item (itemNumber) of gCurLvlObjects
+    put newValue into item (itemNumber) \
+        of gCurLvlObjects
     
     -- modify global state
-    put gCurLvlObjects into line (curLevel) of lvlObjects
+    put gCurLvlObjects into line (curLevel) \
+        of lvlObjects
 end modifyObjectState
 
 on beginDeath
-    global state, deathCount, spritesAllDeadRght, cheatInvincible
+    global state, deathCount, spritesAllDeadRght
+    global cheatInvincible
     if cheatInvincible is not true then
         put "dying" into state
         put 0 into deathCount
-        set the icon of cd btn "gliderSpritesMe" to spritesAllDeadRght
+        set the icon of cd btn "gliderSpritesMe" to \
+            spritesAllDeadRght
     end if
 end beginDeath
 
 on refreshOnLevelChange
-    global curLevel, gCurLvlData, gCurLvlObjects, lvlData, lvlObjects
+    global curLevel, gCurLvlData, gCurLvlObjects
+    global lvlData, lvlObjects
     
     repeat with x = 1 to 16
         hide cd btn ("gliderSprites" & x)
@@ -390,36 +459,34 @@ on refreshOnLevelChange
     else if curLevel is "" or curLevel is -1 then
         put -1 into curLevel
         set the icon of cd btn "gliderBg0" to 1
-        set the rect of cd btn "btnContinue" to 367,22,487,96
-        set the label of cd btn "btnContinue" to "New Game"
+        set the rect of cd btn "btnContinue" to \
+            367,22,487,96
+        set the label of cd btn "btnContinue" to \
+            "New Game"
     else if curLevel is -2 then
         set the icon of cd btn "gliderBg0" to 2
-        set the rect of cd btn "btnContinue" to 126,300,126+254,300+36
-        set the label of cd btn "btnContinue" to "Start"
+        set the rect of cd btn "btnContinue" to \
+            126,300,126+254,300+36
+        set the label of cd btn "btnContinue" to \
+            "Start"
     else if curLevel is -3 then
         set the icon of cd btn "gliderBg0" to 3
-        set the rect of cd btn "btnContinue" to 126,300,126+254,300+36
-        set the label of cd btn "btnContinue" to "Home"
+        set the rect of cd btn "btnContinue" to \
+            126,300,126+254,300+36
+        set the label of cd btn "btnContinue" to \
+            "Home"
         if cd fld "lives" > 0 then
             hide cd fld "gameOver"
         else
             show cd fld "gameOver"
-            put (newline & newline & "Game Over..." & newline & newline & "Your score was " & (cd fld "score") & ".") into cd fld "gameOver"
+            put (newline & newline & "Game Over..." & \
+                newline & newline & "Your score was " & \
+                (cd fld "score") & ".") \
+                into cd fld "gameOver"
         end if
     else
         set the idlerate to "faster"
-        global spriteShadoRght, spritesShadoLft, spritesRightForward, spritesRightTipped, spritesLeftForward, spritesLeftTipped
-        global spritesTurnEndpoint, spritesRightForward2, spritesRightTipped2, spritesLeftForward2, spritesLeftTipped2, spritesTurnEndpoint2
-        global spritesBurnRght1, spritesBurnRght2, spritesBurnLft1, spritesBurnLft2, spritesAllDeadRght, spritesAllDeadLft
-        global spritesCelVnt, spritesCelDct, spritesFlrVnt, spritesPaper, spritesToastr, spritesToast1
-        global spritesToast2, spritesToast3, spritesToast4, spritesToast5, spritesToast6, spritesTeaKtl
-        global spritesLftFan, spritesRitFan, spritesTable, spritesShredr, spritesBooks, spritesClock
-        global spritesCandle, spritesRbrBnd, spritesBall, spritesFshBwl, spritesFish1, spritesFish2
-        global spritesFish3, spritesFish4, spritesGrease, spritesGreasefall1, spritesGreasefall2, spritesLitSwt
-        global spritesThermo, spritesOutlet, spritesOutletSpark1, spritesOutletSpark2, spritesPwrSwt, spritesGuitar
-        global spritesDrip, spritesShelf, spritesBasket, spritesPaintg, spritesBattry, spritesMacTsh
-        global spritesUpStar, spritesDnStar, spritesCandleFlame1, spritesCandleFlame2, spritesCandleFlame3, spritesDrop1
-        global spritesDrop2, spritesDrop3, spritesDrop4, spritesDrop5
+        
         global spritesVentPatternY
         show cd btn "gliderSpritesMe"
         show cd btn "gliderSpritesShadow"
@@ -428,25 +495,27 @@ on refreshOnLevelChange
         show cd fld "lives"
         show cd fld "behindLives"
         show cd btn "gliderSpritesLivesIcn"
-        set the icon of cd btn "gliderBg0" to 3 + curLevel
         hide cd btn "btnContinue"
+        set the icon of cd btn "gliderBg0" to \
+            3 + curLevel
         
-        put 24 into kCeilingVert
-		put 325 into kFloorVert
-        
-        put 2 into q -- need to make everything larger, to make the sprite show up
+        -- need to make everything larger,
+        -- to make the sprite show up
+        put 2 into q
         
         -- actually load the room
-        global curLevel, lvlData, lvlObjects, dx, dy, propsPerObj
-        put line curLevel of lvlData into curlvldata
-        put item 1 of curlvldata into cd fld "roomName"
+        global curLevel, lvlData, lvlObjects, dx, dy
+        global propsPerObj
+        put line curLevel of lvlData into curLvlData
+        put item 1 of curLvlData into cd fld "roomName"
         if cd fld "roomName" is "Welcome..." then
-            put "Across the room..." into cd fld "roomName"
+            put "Across the room..." into \
+                cd fld "roomName"
         end if
         
         -- actually load the room's objects
-        put line (curLevel) of lvlObjects into curLvlObjects
-        put item 2 of curlvldata into numObjects
+        put line curLevel of lvlObjects into curLvlObjects
+        put item 2 of curLvlData into numObjects
         repeat with i = 1 to numObjects
             put (propsPerObj * (i-1))  into j
             put item (j+3) of curLvlObjects into spritex0
@@ -456,87 +525,32 @@ on refreshOnLevelChange
             if spritex0 is "" then
                 answer (i && j && curLvlObjects)
             end if
-            set the rect of cd btn ("gliderSprites" & i) to spritex0, spritey0, max(1,spritex1), max(1,spritey1)
-            set the icon of cd btn ("gliderSprites" & i) to 0 -- invisible by default
+            
+            set rect of cd btn ("gliderSprites" & i) to \
+                spritex0, spritey0, max(1,spritex1), \
+                max(1,spritey1)
+            set icon of cd btn ("gliderSprites" & i) to \
+                0 -- invisible by default
+            
             put item (j+1) of curLvlObjects into objTypeName
             put item (j+7) of curLvlObjects into amount
             put item (j+9) of curLvlObjects into isOn
+            
             if isOn is 1 then
                 show cd btn ("gliderSprites" & i)
---~                 set the style of cd btn ("gliderSprites" & i) to "rectangle"
             else
                 hide cd btn ("gliderSprites" & i)
             end if
             
-            if objTypeName is "flrVnt" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesVentPatternY
-                -- the event rect is different than the sprite rect. see tempInt := (boundRect.right + boundRect.left) div 2;
-                put round((spritex0 + spritex1)/2) into tempInt
-                set the rect of cd btn ("gliderSprites" & i) to tempInt - 8, amount, tempInt + 8, kFloorVert
-            else if objTypeName is "celVnt" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesVentPatternY
-                put round((spritex0 + spritex1)/2) into tempInt
-                set the rect of cd btn ("gliderSprites" & i) to tempInt - 8, kCeilingVert, tempInt + 8, amount
-            else if objTypeName is "celDct" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesVentPatternY
-                put round((spritex0 + spritex1)/2) into tempInt
-                set the rect of cd btn ("gliderSprites" & i) to tempInt - 8, kCeilingVert, tempInt + 8, amount
-            else if objTypeName is "lftFan" then
-                set the rect of cd btn ("gliderSprites" & i) to amount, spritey0 + 10, spritex0, spritey0 + 30
-            else if objTypeName is "ritFan" then
-                set the rect of cd btn ("gliderSprites" & i) to spritex1, spritey0 + 10, amount, spritey0 + 30
-            else if objTypeName is "guitar" then
---~                 set the rect of cd btn ("gliderSprites" & i) to spritex0+36, spritey0 + 24, spritex0+38, spritey1 -56
-            else if objTypeName is "upStar" then
-                set the rect of cd btn ("gliderSprites" & i) to spritex0 + 32, spritey0, spritex1 - 32, spritey0 + 8
-                set the height of cd btn  ("gliderSprites" & i) to 70+the height of cd btn  ("gliderSprites" & i)
-                set the top of cd btn  ("gliderSprites" & i) to -30+the top of cd btn  ("gliderSprites" & i)
-            else if objTypeName is "dnStar" then
-                set the rect of cd btn ("gliderSprites" & i) to spritex0 + 32, spritey1 - 8, spritex1 - 32, spritey1
-                set the height of cd btn  ("gliderSprites" & i) to 60+the height of cd btn  ("gliderSprites" & i)
-                set the top of cd btn  ("gliderSprites" & i) to -30+the top of cd btn  ("gliderSprites" & i)
-            else if objTypeName is "candle" then
-                put round((spritex0 + spritex1)/2) into tempInt
-				set the rect of cd btn ("gliderSprites" & i) to tempInt - 12, amount, tempInt + 4, spritey0
-                
-            else if objTypeName is "outlet" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesOutlet
-            else if objTypeName is "clock" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesClock
-            else if objTypeName is "battry" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesBattry
-            else if objTypeName is "paper" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesPaper
+            refreshOnLevelChangeIcons objTypeName, i, \
+                amount, spritex0, spritex1, spritey0, spritey1
             
-            -- bnsRct is a bonus rectangle
-            else if objTypeName is "litSwt" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesLitSwt
-            else if objTypeName is "grease" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesGrease
-            else if objTypeName is "rbrBnd" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesRbrBnd
-            else if objTypeName is "drip" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesDrip
-            else if objTypeName is "shredr" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesShredr
-            else if objTypeName is "ball" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesBall
-            else if objTypeName is "fshBwl" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesFshBwl
-            else if objTypeName is "pwrSwt" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesPwrSwt
-            else if objTypeName is "thermo" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesThermo
-            else if objTypeName is "toastr" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesToastr
-            else if objTypeName is "teaKtl" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesTeaKtl
-            else if objTypeName is "macTsh" then
-                set the icon of cd btn ("gliderSprites" & i) to spritesMacTsh
-            end if
-            
-            set the width of cd btn ("gliderSprites" & i) to q + the width of cd btn ("gliderSprites" & i)
-            set the height of cd btn ("gliderSprites" & i) to q + the height of cd btn ("gliderSprites" & i)
+            set width of cd btn ("gliderSprites" & i) \
+                to q + the width of cd btn \
+                ("gliderSprites" & i)
+            set height of cd btn ("gliderSprites" & i) \
+                to q + the height of cd btn \
+                ("gliderSprites" & i)
         end repeat
     end if
     
@@ -545,3 +559,159 @@ on refreshOnLevelChange
         put line curLevel of lvlObjects into gCurLvlObjects
     end if
 end refreshOnLevelChange
+
+on refreshOnLevelChangeIcons objTypeName, i, \
+    amount, spritex0, spritex1, spritey0, spritey1
+    global spriteShadoRght, spritesShadoLft
+    global spritesRightForward, spritesRightTipped
+    global spritesLeftForward, spritesLeftTipped
+    global spritesTurnEndpoint, spritesRightForward2
+    global spritesRightTipped2, spritesLeftForward2
+    global spritesLeftTipped2, spritesTurnEndpoint2
+    global spritesBurnRght1, spritesBurnRght2
+    global spritesBurnLft1, spritesBurnLft2
+    global spritesAllDeadRght, spritesAllDeadLft
+    global spritesCelVnt, spritesCelDct
+    global spritesFlrVnt, spritesPaper
+    global spritesToastr, spritesToast1
+    global spritesToast2, spritesToast3
+    global spritesToast4, spritesToast5
+    global spritesToast6, spritesTeaKtl
+    global spritesLftFan, spritesRitFan
+    global spritesTable, spritesShredr
+    global spritesBooks, spritesClock
+    global spritesCandle, spritesRbrBnd
+    global spritesBall, spritesFshBwl
+    global spritesFish1, spritesFish2
+    global spritesFish3, spritesFish4
+    global spritesGrease, spritesGreaseFall1
+    global spritesGreaseFall2, spritesLitSwt
+    global spritesThermo, spritesOutlet
+    global spritesOutletSpark1, spritesOutletSpark2
+    global spritesPwrSwt, spritesGuitar
+    global spritesDrip, spritesShelf
+    global spritesBasket, spritesPaintg
+    global spritesBattry, spritesMacTsh
+    global spritesUpStar, spritesDnStar
+    global spritesCandleFlame1, spritesCandleFlame2
+    global spritesCandleFlame3, spritesDrop1
+    global spritesDrop2, spritesDrop3
+    global spritesDrop4, spritesDrop5
+    global spritesVentPatternY
+    
+    put 24 into kCeilingVert
+    put 325 into kFloorVert
+    
+    if objTypeName is "flrVnt" then
+        set icon of cd btn ("gliderSprites" & i) \
+            to spritesVentPatternY
+        -- the event rect is different than
+        -- the sprite rect.
+        -- see tempInt := (boundRect.right + 
+        -- boundRect.left) div 2;
+        
+        put round((spritex0 + spritex1)/2) \
+            into tempInt
+        set the rect of cd btn \
+            ("gliderSprites" & i) to \
+            tempInt - 8, amount, \
+            tempInt + 8, kFloorVert
+        
+    else if objTypeName is "celVnt" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesVentPatternY
+        put round((spritex0 + spritex1)/2) into tempInt
+        set rect of cd btn ("gliderSprites" & i) to \
+            tempInt - 8, kCeilingVert, tempInt + 8, \
+            amount
+    else if objTypeName is "celDct" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesVentPatternY
+        put round((spritex0 + spritex1)/2) into tempInt
+        set rect of cd btn ("gliderSprites" & i) to \
+            tempInt - 8, kCeilingVert, tempInt + 8, \
+            amount
+    else if objTypeName is "lftFan" then
+        set rect of cd btn ("gliderSprites" & i) to \
+            amount, spritey0 + 10, spritex0, \
+            spritey0 + 30
+    else if objTypeName is "ritFan" then
+        set rect of cd btn ("gliderSprites" & i) to \
+            spritex1, spritey0 + 10, amount, \
+            spritey0 + 30
+    else if objTypeName is "guitar" then
+        -- set rect of cd btn ("gliderSprites" & i) to \
+            -- spritex0+36, spritey0 + 24, spritex0+38, 
+        -- spritey1 -56
+    else if objTypeName is "upStar" then
+        set rect of cd btn ("gliderSprites" & i) to \
+            spritex0 + 32, spritey0, spritex1 - 32, \
+            spritey0 + 8
+        set height of cd btn ("gliderSprites" & i) to \
+            70 + height of cd btn  ("gliderSprites" & i)
+        set top of cd btn ("gliderSprites" & i) to \
+            -30 + top of cd btn  ("gliderSprites" & i)
+    else if objTypeName is "dnStar" then
+        set rect of cd btn ("gliderSprites" & i) to \
+            spritex0 + 32, spritey1 - 8, spritex1 - 32, \
+            spritey1
+        set height of cd btn ("gliderSprites" & i) to \
+            60+the height of cd btn ("gliderSprites" & i)
+        set top of cd btn ("gliderSprites" & i) to \
+            -30 + the top of cd btn ("gliderSprites" & i)
+    else if objTypeName is "candle" then
+        put round((spritex0 + spritex1)/2) into tempInt
+        set rect of cd btn ("gliderSprites" & i) to \
+            tempInt - 12, amount, tempInt + 4, spritey0
+        
+    else if objTypeName is "outlet" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesOutlet
+    else if objTypeName is "clock" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesClock
+    else if objTypeName is "battry" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesBattry
+    else if objTypeName is "paper" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesPaper
+        -- bnsRct is a bonus rectangle
+    else if objTypeName is "litSwt" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesLitSwt
+    else if objTypeName is "grease" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesGrease
+    else if objTypeName is "rbrBnd" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesRbrBnd
+    else if objTypeName is "drip" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesDrip
+    else if objTypeName is "shredr" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesShredr
+    else if objTypeName is "ball" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesBall
+    else if objTypeName is "fshBwl" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesFshBwl
+    else if objTypeName is "pwrSwt" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesPwrSwt
+    else if objTypeName is "thermo" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesThermo
+    else if objTypeName is "toastr" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesToastr
+    else if objTypeName is "teaKtl" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesTeaKtl
+    else if objTypeName is "macTsh" then
+        set icon of cd btn ("gliderSprites" & i) to \
+            spritesMacTsh
+    end if
+end refreshOnLevelChangeIcons

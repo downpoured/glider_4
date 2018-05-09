@@ -1,5 +1,6 @@
--- Glider 4, by john calhoun
--- ported/rewritten by Ben Fisher
+--- Glider 4, by john calhoun
+--- ported/rewritten by Ben Fisher
+
 -- https://github.com/downpoured/glider_4
 
 -- when editing the game, it might be useful
@@ -8,31 +9,37 @@
 
 -- script of stack:
 
-function rectIntersect x0, x1, y0, y1, boxX0, boxX1, boxY0, boxY1
+function rectIntersect x0, x1, y0, y1, \
+    boxX0, boxX1, boxY0, boxY1
+    
     if (x0 >= boxX1 or y0 >= boxY1)  then
         -- it's way outside on the right or bottom
         return 0 -- no overlap
-     else if (x1 < boxX0 or y1 < boxY0)  then
+    else if (x1 < boxX0 or y1 < boxY0)  then
         -- it's way outside on the left or top
         return 0 -- no overlap
-     else if (x0 >= boxX0 and x1 <= boxX1 and y0 >= boxY0 and y1 <= boxY1)  then
+    else if (x0 >= boxX0 and x1 <= boxX1 and \
+        y0 >= boxY0 and y1 <= boxY1)  then
         return 1 -- completely covers
-     else if (boxX0 >= x0 and boxX1 <= x1 and boxY0 >= y0 and boxY1 <= y1)  then
+    else if (boxX0 >= x0 and boxX1 <= x1 and \
+        boxY0 >= y0 and boxY1 <= y1)  then
         return 2 -- completely within
-     else
+    else
         return 3 -- partial overlap
     end if
 end rectIntersect
 
-function getCollideResult objTypeName, isOn, amount, extra
+function getCollideResult objTypeName, isOn, \
+    amount, extra
     put "" into resultPt1
     put "" into resultPt2
     put "/" & objTypeName & "/" into objTypeNameTest
-    if objTypeNameTest is in "/table/shelf/books/cabnet/obsRct/drip/toastr/ball/fshBwl/basket/macTsh/" then
+    if objTypeNameTest is in \
+        "/table/shelf/books/cabnet/obsRct/drip/toastr/ball/fshBwl/basket/macTsh/" then
         put "crashIt" into resultPt1
         return resultPt1 & "|" & resultPt2
     end if
-            
+    
     if objTypeName is "extRct" then
         put "moveIt" into resultPt1
         put amount into resultPt2
@@ -111,17 +118,20 @@ function getCollideResult objTypeName, isOn, amount, extra
         end if
     else if objTypeName is "pwrSwt" then
         put "toggleIt" into resultPt1
-        put amount into resultPt2 -- 	{object# linked to}
+        put amount into resultPt2 
+        -- {object# linked to}
     else if objTypeName is "guitar" then
         play "glider_1_Guitar" 
         put "playIt" into resultPt1
         put "0" into resultPt2
     else if objTypeName is "upStar" then
         put "ascendIt" into resultPt1
-        put amount into resultPt2 -- {room # linked to}
+        put amount into resultPt2
+        -- {room # linked to}
     else if objTypeName is "dnStar" then
         put "descendIt" into resultPt1
-        put amount into resultPt2 -- {room # linked to}
+        put amount into resultPt2
+        -- {room # linked to}
     else
         put "ignoreIt" into resultPt1
     end if
@@ -129,18 +139,42 @@ function getCollideResult objTypeName, isOn, amount, extra
 end getCollideResult
 
 on initSpriteConstantsAndGameData
-    global spriteShadoRght, spritesShadoLft, spritesRightForward, spritesRightTipped, spritesLeftForward, spritesLeftTipped
-    global spritesTurnEndpoint, spritesRightForward2, spritesRightTipped2, spritesLeftForward2, spritesLeftTipped2, spritesTurnEndpoint2
-    global spritesBurnRght1, spritesBurnRght2, spritesBurnLft1, spritesBurnLft2, spritesAllDeadRght, spritesAllDeadLft
-    global spritesCelVnt, spritesCelDct, spritesFlrVnt, spritesPaper, spritesToastr, spritesToast1
-    global spritesToast2, spritesToast3, spritesToast4, spritesToast5, spritesToast6, spritesTeaKtl
-    global spritesLftFan, spritesRitFan, spritesTable, spritesShredr, spritesBooks, spritesClock
-    global spritesCandle, spritesRbrBnd, spritesBall, spritesFshBwl, spritesFish1, spritesFish2
-    global spritesFish3, spritesFish4, spritesGrease, spritesGreasefall1, spritesGreasefall2, spritesLitSwt
-    global spritesThermo, spritesOutlet, spritesOutletSpark1, spritesOutletSpark2, spritesPwrSwt, spritesGuitar
-    global spritesDrip, spritesShelf, spritesBasket, spritesPaintg, spritesBattry, spritesMacTsh
-    global spritesUpStar, spritesDnStar, spritesCandleFlame1, spritesCandleFlame2, spritesCandleFlame3, spritesDrop1
-    global spritesDrop2, spritesDrop3, spritesDrop4, spritesDrop5
+    global spriteShadoRght, spritesShadoLft
+    global spritesRightForward, spritesRightTipped
+    global spritesLeftForward, spritesLeftTipped
+    global spritesTurnEndpoint, spritesRightForward2
+    global spritesRightTipped2, spritesLeftForward2
+    global spritesLeftTipped2, spritesTurnEndpoint2
+    global spritesBurnRght1, spritesBurnRght2
+    global spritesBurnLft1, spritesBurnLft2
+    global spritesAllDeadRght, spritesAllDeadLft
+    global spritesCelVnt, spritesCelDct
+    global spritesFlrVnt, spritesPaper
+    global spritesToastr, spritesToast1
+    global spritesToast2, spritesToast3
+    global spritesToast4, spritesToast5
+    global spritesToast6, spritesTeaKtl
+    global spritesLftFan, spritesRitFan
+    global spritesTable, spritesShredr
+    global spritesBooks, spritesClock
+    global spritesCandle, spritesRbrBnd
+    global spritesBall, spritesFshBwl
+    global spritesFish1, spritesFish2
+    global spritesFish3, spritesFish4
+    global spritesGrease, spritesGreaseFall1
+    global spritesGreaseFall2, spritesLitSwt
+    global spritesThermo, spritesOutlet
+    global spritesOutletSpark1, spritesOutletSpark2
+    global spritesPwrSwt, spritesGuitar
+    global spritesDrip, spritesShelf
+    global spritesBasket, spritesPaintg
+    global spritesBattry, spritesMacTsh
+    global spritesUpStar, spritesDnStar
+    global spritesCandleFlame1, spritesCandleFlame2
+    global spritesCandleFlame3, spritesDrop1
+    global spritesDrop2, spritesDrop3
+    global spritesDrop4, spritesDrop5
+    
     put 2 into spriteShadoRght
     put 3 into spritesShadoLft
     put 4 into spritesRightForward
@@ -186,8 +220,8 @@ on initSpriteConstantsAndGameData
     put 44 into spritesFish3
     put 45 into spritesFish4
     put 46 into spritesGrease
-    put 47 into spritesGreasefall1
-    put 48 into spritesGreasefall2
+    put 47 into spritesGreaseFall1
+    put 48 into spritesGreaseFall2
     put 49 into spritesLitSwt
     put 50 into spritesThermo
     put 51 into spritesOutlet
@@ -407,4 +441,3 @@ on initSpriteConstantsAndGameData
     put "218|325|266|338|44|0|0|flrVnt|8|311|325|359|338|44|0|0|flrVnt|8|396|325|444|338|44|0|0|cabnet|4|11|2" after line 40 of lvlObjects
     put "13|76|324|0|0|0|paper|17|29|193|77|214|1000|0|0" after line 40 of lvlObjects
 end initSpriteConstantsAndGameData
-
