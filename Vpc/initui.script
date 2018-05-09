@@ -48,7 +48,7 @@ on startNewGame
     global cheatInvincible, state, curLevel, clockCount
     global lastDirPressed, propsPerObj, dy
     global levelsSeen
-    global sprites_right_forward, sprites_shadoRght
+    global spritesRightForward, spriteShadoRght
     initSpriteConstantsAndLoadGameData
     put false into cheatInvincible
     put "playing" into state
@@ -56,8 +56,8 @@ on startNewGame
     put 3 into cd fld "lives"
     put 0 into cd fld "score"
     put 1 into curLevel
-    set the icon of cd btn "glider_spritesme" to sprites_right_forward
-    set the icon of cd btn "glider_spritesshadow" to sprites_shadoRght
+    set the icon of cd btn "glider_spritesme" to spritesRightForward
+    set the icon of cd btn "glider_spritesshadow" to spriteShadoRght
     set the topleft of cd btn "glider_spritesme" to 20, 20
     set the topleft of cd btn "glider_spritesshadow" to -400, -400
     put "" into lastDirPressed
@@ -86,7 +86,7 @@ end startNewGame
 
 on initUI
     global curLevel
-    global sprites_right_forward
+    global spritesRightForward
     set the style of cd btn "glider_bg0" to "transparent"
     set the showLabel of cd btn "glider_bg0" to false
     set the autoHilite of cd btn "glider_bg0" to false
@@ -120,7 +120,7 @@ on initUI
     set the rect of cd fld "lives" to (395-26), basey+3-18, (395-26)+22, h
     set the rect of cd btn "glider_spriteslivesicon" to 419-26, (basey-18)-2, (419-26)+42, h
     set the rect of cd fld "gameover" to 23,23,23+451,23+236
-    set the icon of cd btn "glider_spriteslivesicon" to sprites_right_forward
+    set the icon of cd btn "glider_spriteslivesicon" to spritesRightForward
     set the showLabel of cd btn "glider_spriteslivesicon" to false
     
     play "glider_1_Aww" load

@@ -113,7 +113,7 @@ end newlevelbonus
 
 on mainloopgame_collisions
     global curLevel, propsPerObj, dx, dy, gcurlvldata, gcurlvlObjects
-    global sprites_burnrght1, sprites_outletspark1
+    global spritesBurnRght1, spritesOutletSpark1
     
     put intersectRoomObject(gcurlvldata, gcurlvlObjects, the left of cd btn "glider_spritesme", the top of cd btn "glider_spritesme", the right of cd btn "glider_spritesme", the bottom of cd btn "glider_spritesme") into intersects
     put the number of items in intersects into numintersects
@@ -143,7 +143,7 @@ on mainloopgame_collisions
         else if collideType is "burnIt" then
             if the bottom of cd btn "glider_spritesme" >= (the bottom of cd btn ("glider_sprites" & i)-30) then
                 begindeath
-                set the icon of cd btn "glider_spritesme" to sprites_burnrght1
+                set the icon of cd btn "glider_spritesme" to spritesBurnRght1
             else
                 put -6 into dy
             end if
@@ -154,9 +154,9 @@ on mainloopgame_collisions
         else if collideType is "lightIt" then
             -- not yet supported
         else if collideType is "zapIt" then
-            if the icon of cd btn ("glider_sprites" & i) is sprites_outletspark1 then
+            if the icon of cd btn ("glider_sprites" & i) is spritesOutletSpark1 then
                 begindeath
-                set the icon of cd btn "glider_spritesme" to sprites_burnrght1
+                set the icon of cd btn "glider_spritesme" to spritesBurnRght1
             end if
         else if collideType is "airOnIt" then
             -- not yet supported
@@ -190,23 +190,23 @@ end mainloopgame_collisions
 
 
 on mainloopgame_periodic i
-    global clockCount, propsPerObj, sprites_outlet, sprites_outletspark1, gcurlvldata, gcurlvlObjects
+    global clockCount, propsPerObj, spritesOutlet, spritesOutletSpark1, gcurlvldata, gcurlvlObjects
     add 1 to clockCount
     if clockCount mod 20 is 1 then
         put (propsPerObj * (i-1)) into j
         put item (j+1) of gcurlvlObjects into objtypename
         if objtypename is "outlet" then
-            if the icon of cd btn ("glider_sprites" & i) is sprites_outletspark1 then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_outlet
+            if the icon of cd btn ("glider_sprites" & i) is spritesOutletSpark1 then
+                set the icon of cd btn ("glider_sprites" & i) to spritesOutlet
             else
-                set the icon of cd btn ("glider_sprites" & i) to sprites_outletspark1
+                set the icon of cd btn ("glider_sprites" & i) to spritesOutletSpark1
             end if
         end if
     end if
 end mainloopgame_periodic
 
 on mainloopdying
-    global deathcount, state, curLevel, sprites_right_forward
+    global deathcount, state, curLevel, spritesRightForward
     if deathcount < 30 then
         put deathcount+1 into deathcount
     else
@@ -217,7 +217,7 @@ on mainloopdying
             refreshOnLevelChange
         else
             set the topleft of cd btn "glider_spritesme" to 20,20
-            set the icon of cd btn "glider_spritesme" to sprites_right_forward
+            set the icon of cd btn "glider_spritesme" to spritesRightForward
             put "playing" into state
             play "glider_1_BeamIn"
         end if
@@ -344,11 +344,11 @@ on modifyObjectState itemnumber, newvalue
 end modifyObjectState
 
 on begindeath
-    global state, deathcount, sprites_alldeadrght, cheatInvincible
+    global state, deathcount, spritesAllDeadRght, cheatInvincible
     if cheatInvincible is not true then
         put "dying" into state
         put 0 into deathcount
-        set the icon of cd btn "glider_spritesme" to sprites_alldeadrght
+        set the icon of cd btn "glider_spritesme" to spritesAllDeadRght
     end if
 end begindeath
 
@@ -398,18 +398,18 @@ on refreshOnLevelChange
         end if
     else
         set the idlerate to "faster"
-        global sprites_shadoRght, sprites_shadoLft, sprites_right_forward, sprites_right_tipped, sprites_left_forward, sprites_left_tipped
-        global sprites_turn_endpoint, sprites_right_forward2, sprites_right_tipped2, sprites_left_forward2, sprites_left_tipped2, sprites_turn_endpoint2
-        global sprites_burnrght1, sprites_burnrght2, sprites_burnlft1, sprites_burnlft2, sprites_alldeadrght, sprites_alldeadlft
-        global sprites_celVnt, sprites_celDct, sprites_flrVnt, sprites_paper, sprites_toastr, sprites_toast1
-        global sprites_toast2, sprites_toast3, sprites_toast4, sprites_toast5, sprites_toast6, sprites_teaKtl
-        global sprites_lftFan, sprites_ritFan, sprites_table, sprites_shredr, sprites_books, sprites_clock
-        global sprites_candle, sprites_rbrBnd, sprites_ball, sprites_fshBwl, sprites_fish1, sprites_fish2
-        global sprites_fish3, sprites_fish4, sprites_grease, sprites_greasefall1, sprites_greasefall2, sprites_litSwt
-        global sprites_thermo, sprites_outlet, sprites_outletspark1, sprites_outletspark2, sprites_pwrSwt, sprites_guitar
-        global sprites_drip, sprites_shelf, sprites_basket, sprites_paintg, sprites_battry, sprites_macTsh
-        global sprites_upStar, sprites_dnStar, sprites_candleflame1, sprites_candleflame2, sprites_candleflame3, sprites_drop1
-        global sprites_drop2, sprites_drop3, sprites_drop4, sprites_drop5
+        global spriteShadoRght, spritesShadoLft, spritesRightForward, spritesRightTipped, spritesLeftForward, spritesLeftTipped
+        global spritesTurnEndpoint, spritesRightForward2, spritesRightTipped2, spritesLeftForward2, spritesLeftTipped2, spritesTurnEndpoint2
+        global spritesBurnRght1, spritesBurnRght2, spritesBurnLft1, spritesBurnLft2, spritesAllDeadRght, spritesAllDeadLft
+        global spritesCelVnt, spritesCelDct, spritesFlrVnt, spritesPaper, spritesToastr, spritesToast1
+        global spritesToast2, spritesToast3, spritesToast4, spritesToast5, spritesToast6, spritesTeaKtl
+        global spritesLftFan, spritesRitFan, spritesTable, spritesShredr, spritesBooks, spritesClock
+        global spritesCandle, spritesRbrBnd, spritesBall, spritesFshBwl, spritesFish1, spritesFish2
+        global spritesFish3, spritesFish4, spritesGrease, spritesGreasefall1, spritesGreasefall2, spritesLitSwt
+        global spritesThermo, spritesOutlet, spritesOutletSpark1, spritesOutletSpark2, spritesPwrSwt, spritesGuitar
+        global spritesDrip, spritesShelf, spritesBasket, spritesPaintg, spritesBattry, spritesMacTsh
+        global spritesUpStar, spritesDnStar, spritesCandleFlame1, spritesCandleFlame2, spritesCandleFlame3, spritesDrop1
+        global spritesDrop2, spritesDrop3, spritesDrop4, spritesDrop5
         show cd btn "glider_spritesme"
         show cd btn "glider_spritesshadow"
         show cd fld "roomname"
@@ -419,7 +419,7 @@ on refreshOnLevelChange
         show cd btn "glider_spriteslivesicon"
         set the icon of cd btn "glider_bg0" to 3+curLevel
         hide cd btn "btn_continue"
-        global sprites_ventpatterny
+        global spritesVentPatternY
         
         put 24 into kCeilingVert
 		put 325 into kFloorVert
@@ -459,16 +459,16 @@ on refreshOnLevelChange
             end if
             
             if objtypename is "flrVnt" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_ventpatterny
+                set the icon of cd btn ("glider_sprites" & i) to spritesVentPatternY
                 -- the event rect is different than the sprite rect. see tempInt := (boundRect.right + boundRect.left) div 2;
                 put round((spritex0 + spritex1)/2) into tempInt
                 set the rect of cd btn ("glider_sprites" & i) to tempInt - 8, amount, tempInt + 8, kFloorVert
             else if objtypename is "celVnt" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_ventpatterny
+                set the icon of cd btn ("glider_sprites" & i) to spritesVentPatternY
                 put round((spritex0 + spritex1)/2) into tempInt
                 set the rect of cd btn ("glider_sprites" & i) to tempInt - 8, kCeilingVert, tempInt + 8, amount
             else if objtypename is "celDct" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_ventpatterny
+                set the icon of cd btn ("glider_sprites" & i) to spritesVentPatternY
                 put round((spritex0 + spritex1)/2) into tempInt
                 set the rect of cd btn ("glider_sprites" & i) to tempInt - 8, kCeilingVert, tempInt + 8, amount
             else if objtypename is "lftFan" then
@@ -490,39 +490,39 @@ on refreshOnLevelChange
 				set the rect of cd btn ("glider_sprites" & i) to tempInt - 12, amount, tempInt + 4, spritey0
                 
             else if objtypename is "outlet" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_outlet
+                set the icon of cd btn ("glider_sprites" & i) to spritesOutlet
             else if objtypename is "clock" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_clock
+                set the icon of cd btn ("glider_sprites" & i) to spritesClock
             else if objtypename is "battry" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_battry
+                set the icon of cd btn ("glider_sprites" & i) to spritesBattry
             else if objtypename is "paper" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_paper
+                set the icon of cd btn ("glider_sprites" & i) to spritesPaper
             
             -- bnsRct is a bonus rectangle
             else if objtypename is "litSwt" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_litSwt
+                set the icon of cd btn ("glider_sprites" & i) to spritesLitSwt
             else if objtypename is "grease" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_grease
+                set the icon of cd btn ("glider_sprites" & i) to spritesGrease
             else if objtypename is "rbrBnd" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_rbrBnd
+                set the icon of cd btn ("glider_sprites" & i) to spritesRbrBnd
             else if objtypename is "drip" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_drip
+                set the icon of cd btn ("glider_sprites" & i) to spritesDrip
             else if objtypename is "shredr" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_shredr
+                set the icon of cd btn ("glider_sprites" & i) to spritesShredr
             else if objtypename is "ball" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_ball
+                set the icon of cd btn ("glider_sprites" & i) to spritesBall
             else if objtypename is "fshBwl" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_fshBwl
+                set the icon of cd btn ("glider_sprites" & i) to spritesFshBwl
             else if objtypename is "pwrSwt" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_pwrSwt
+                set the icon of cd btn ("glider_sprites" & i) to spritesPwrSwt
             else if objtypename is "thermo" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_thermo
+                set the icon of cd btn ("glider_sprites" & i) to spritesThermo
             else if objtypename is "toastr" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_toastr
+                set the icon of cd btn ("glider_sprites" & i) to spritesToastr
             else if objtypename is "teaKtl" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_teaKtl
+                set the icon of cd btn ("glider_sprites" & i) to spritesTeaKtl
             else if objtypename is "macTsh" then
-                set the icon of cd btn ("glider_sprites" & i) to sprites_macTsh
+                set the icon of cd btn ("glider_sprites" & i) to spritesMacTsh
             end if
             
             set the width of cd btn ("glider_sprites" & i) to q + the width of cd btn ("glider_sprites" & i)
