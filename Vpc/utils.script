@@ -8,131 +8,127 @@
 
 -- script of stack:
 
-function rectIntersect x0, x1, y0, y1, boxx0, boxx1, boxy0, boxy1
-    if (x0 >= boxx1 or y0 >= boxy1)  then
+function rectIntersect x0, x1, y0, y1, boxX0, boxX1, boxY0, boxY1
+    if (x0 >= boxX1 or y0 >= boxY1)  then
         -- it's way outside on the right or bottom
         return 0 -- no overlap
-     else if (x1 < boxx0 or y1 < boxy0)  then
+     else if (x1 < boxX0 or y1 < boxY0)  then
         -- it's way outside on the left or top
         return 0 -- no overlap
-     else if (x0 >= boxx0 and x1 <= boxx1 and y0 >= boxy0 and y1 <= boxy1)  then
-        return 1 -- CompletelyCovers;
-     else if (boxx0 >= x0 and boxx1 <= x1 and boxy0 >= y0 and boxy1 <= y1)  then
-        return 2 -- CompletelyWithin;
+     else if (x0 >= boxX0 and x1 <= boxX1 and y0 >= boxY0 and y1 <= boxY1)  then
+        return 1 -- completely covers
+     else if (boxX0 >= x0 and boxX1 <= x1 and boxY0 >= y0 and boxY1 <= y1)  then
+        return 2 -- completely within
      else
-        return 3 -- PartialOverlap;
+        return 3 -- partial overlap
     end if
 end rectIntersect
 
-function getCollideResult objtypename, isOn, amount, extra
-    put "" into resultpt1
-    put "" into resultpt2
-    put "/" & objtypename & "/" into objtypenametest
-    if objtypenametest is in "/table/shelf/books/cabnet/obsRct/drip/toastr/ball/fshBwl/basket/macTsh/" then
-        put "crashIt" into resultpt1
-        return resultpt1 & "|" & resultpt2
+function getCollideResult objTypeName, isOn, amount, extra
+    put "" into resultPt1
+    put "" into resultPt2
+    put "/" & objTypeName & "/" into objTypeNameTest
+    if objTypeNameTest is in "/table/shelf/books/cabnet/obsRct/drip/toastr/ball/fshBwl/basket/macTsh/" then
+        put "crashIt" into resultPt1
+        return resultPt1 & "|" & resultPt2
     end if
             
-    if objtypename == "extRct" then
-        put "moveIt" into resultpt1
-        put amount into resultpt2
-    else if objtypename == "flrVnt" then
-        put "liftIt" into resultpt1
-    else if objtypename == "celVnt" then
-        put "dropIt" into resultpt1
-    else if objtypename == "celDct" then
+    if objTypeName is "extRct" then
+        put "moveIt" into resultPt1
+        put amount into resultPt2
+    else if objTypeName is "flrVnt" then
+        put "liftIt" into resultPt1
+    else if objTypeName is "celVnt" then
+        put "dropIt" into resultPt1
+    else if objTypeName is "celDct" then
         if isOn is 1 then
-            put "dropIt" into resultpt1
+            put "dropIt" into resultPt1
         else
-            put "moveIt" into resultpt1
-            put extra into resultpt2
+            put "moveIt" into resultPt1
+            put extra into resultPt2
         end if
-    else if objtypename == "candle" then
-        put "burnIt" into resultpt1
-    else if objtypename == "lftFan" then
+    else if objTypeName is "candle" then
+        put "burnIt" into resultPt1
+    else if objTypeName is "lftFan" then
         if isOn is 1 then
-            put "turnItLeft" into resultpt1
+            put "turnItLeft" into resultPt1
         else
-            put "ignoreIt" into resultpt1
+            put "ignoreIt" into resultPt1
         end if
-    else if objtypename == "ritFan" then
+    else if objTypeName is "ritFan" then
         if isOn is 1 then
-            put "turnItRight" into resultpt1
+            put "turnItRight" into resultPt1
         else
-            put "ignoreIt" into resultpt1
+            put "ignoreIt" into resultPt1
         end if
-    else if objtypename == "clock" then
+    else if objTypeName is "clock" then
         if isOn is 1 then
             play "glider_1_Clock"
-            put "getitem_awardIt" into resultpt1
-            put amount into resultpt2
+            put "getitem_awardIt" into resultPt1
+            put amount into resultPt2
         end if
-    else if objtypename == "paper" then
+    else if objTypeName is "paper" then
         if isOn is 1 then
             play "glider_1_Extra"
-            put "getitem_extraIt" into resultpt1
-            put amount into resultpt2
+            put "getitem_extraIt" into resultPt1
+            put amount into resultPt2
         end if
-    else if objtypename == "grease" then
+    else if objTypeName is "grease" then
         if isOn is 1 then
-            put "spillIt" into resultpt1
+            put "spillIt" into resultPt1
         else
-            put "slideIt" into resultpt1
+            put "slideIt" into resultPt1
         end if
-    else if objtypename == "bnsRct" then
+    else if objTypeName is "bnsRct" then
         if isOn is 1 then
-            put "trickIt" into resultpt1
-            put amount into resultpt2
+            put "trickIt" into resultPt1
+            put amount into resultPt2
         end if
-    else if objtypename == "battry" then
+    else if objTypeName is "battry" then
         if isOn is 1 then
             play "glider_1_Energize"
-            put "getitem_energizeIt" into resultpt1
-            put amount into resultpt2
+            put "getitem_energizeIt" into resultPt1
+            put amount into resultPt2
         end if
-    else if objtypename == "rbrBnd" then
+    else if objTypeName is "rbrBnd" then
         if isOn is 1 then
             play "glider_1_GetBand"
-            put "getitem_bandIt" into resultpt1
-            put amount into resultpt2
+            put "getitem_bandIt" into resultPt1
+            put amount into resultPt2
         end if
-    else if objtypename == "litSwt" then
-        put "lightIt" into resultpt1
-    else if objtypename == "outlet" then
+    else if objTypeName is "litSwt" then
+        put "lightIt" into resultPt1
+    else if objTypeName is "outlet" then
         play "glider_1_Zap"
-        put "zapIt" into resultpt1
-    else if objtypename == "thermo" then
-        put "airOnIt" into resultpt1
-    else if objtypename == "shredr" then
+        put "zapIt" into resultPt1
+    else if objTypeName is "thermo" then
+        put "airOnIt" into resultPt1
+    else if objTypeName is "shredr" then
         if isOn is 1 then
-            put "shredIt" into resultpt1
+            put "shredIt" into resultPt1
         else
-            put "ignoreIt" into resultpt1
+            put "ignoreIt" into resultPt1
         end if
-    else if objtypename == "pwrSwt" then
-        put "toggleIt" into resultpt1
-        put amount into resultpt2 -- 	{object# linked to}
-    else if objtypename == "guitar" then
+    else if objTypeName is "pwrSwt" then
+        put "toggleIt" into resultPt1
+        put amount into resultPt2 -- 	{object# linked to}
+    else if objTypeName is "guitar" then
         play "glider_1_Guitar" 
-        put "playIt" into resultpt1
-        put "0" into resultpt2
-    else if objtypename == "upStar" then
-        put "ascendIt" into resultpt1
-        put amount into resultpt2 -- {room # linked to}
-    else if objtypename == "dnStar" then
-        put "descendIt" into resultpt1
-        put amount into resultpt2 -- {room # linked to}
+        put "playIt" into resultPt1
+        put "0" into resultPt2
+    else if objTypeName is "upStar" then
+        put "ascendIt" into resultPt1
+        put amount into resultPt2 -- {room # linked to}
+    else if objTypeName is "dnStar" then
+        put "descendIt" into resultPt1
+        put amount into resultPt2 -- {room # linked to}
     else
-        put "ignoreIt" into resultpt1
+        put "ignoreIt" into resultPt1
     end if
-    return resultpt1 & "|" & resultpt2
+    return resultPt1 & "|" & resultPt2
 end getCollideResult
 
-on initSpriteConstantsAndLoadGameData
-    global spritesVentPatternX, spritesVentPatternY
-    put 73 into spritesVentPatternX -- not ready yet
-    put 72 into spritesVentPatternY
-
+on initSpriteConstantsAndGameData
     global spriteShadoRght, spritesShadoLft, spritesRightForward, spritesRightTipped, spritesLeftForward, spritesLeftTipped
     global spritesTurnEndpoint, spritesRightForward2, spritesRightTipped2, spritesLeftForward2, spritesLeftTipped2, spritesTurnEndpoint2
     global spritesBurnRght1, spritesBurnRght2, spritesBurnLft1, spritesBurnLft2, spritesAllDeadRght, spritesAllDeadLft
@@ -215,6 +211,11 @@ on initSpriteConstantsAndLoadGameData
     put 69 into spritesDrop3
     put 70 into spritesDrop4
     put 71 into spritesDrop5
+    
+    -- not yet supported
+    global spritesVentPatternX, spritesVentPatternY
+    put 73 into spritesVentPatternX 
+    put 72 into spritesVentPatternY
     
     global lvlData, lvlObjects
     put "Welcome...|5|0|1|0|0|0|0" into line 1 of lvlData
@@ -405,5 +406,5 @@ on initSpriteConstantsAndLoadGameData
     put "t|10|313|24|361|37|64|41|0|celDct|10|398|24|446|37|57|40|0|flrVnt|8|126|325|174|338|44|0|0|flrVnt|8|" after line 40 of lvlObjects
     put "218|325|266|338|44|0|0|flrVnt|8|311|325|359|338|44|0|0|flrVnt|8|396|325|444|338|44|0|0|cabnet|4|11|2" after line 40 of lvlObjects
     put "13|76|324|0|0|0|paper|17|29|193|77|214|1000|0|0" after line 40 of lvlObjects
-end initSpriteConstantsAndLoadGameData
+end initSpriteConstantsAndGameData
 

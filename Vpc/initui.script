@@ -23,13 +23,13 @@
 on mouseUp
     global curLevel, state
     if curLevel is "needReset" then
-        initSpriteConstantsAndLoadGameData
+        initSpriteConstantsAndGameData
         initUI
         put "gameInactive" into state
         put -1 into curLevel
         refreshOnLevelChange
     else if curLevel is "" or curLevel is -1 then
-        initSpriteConstantsAndLoadGameData
+        initSpriteConstantsAndGameData
         initUI
         put "gameInactive" into state
         put -2 into curLevel
@@ -49,7 +49,7 @@ on startNewGame
     global lastDirPressed, propsPerObj, dy
     global levelsSeen
     global spritesRightForward, spriteShadoRght
-    initSpriteConstantsAndLoadGameData
+    initSpriteConstantsAndGameData
     put false into cheatInvincible
     put "playing" into state
     put "" into cd fld "behindlives"
@@ -58,8 +58,8 @@ on startNewGame
     put 1 into curLevel
     set the icon of cd btn "glider_spritesme" to spritesRightForward
     set the icon of cd btn "glider_spritesshadow" to spriteShadoRght
-    set the topleft of cd btn "glider_spritesme" to 20, 20
-    set the topleft of cd btn "glider_spritesshadow" to -400, -400
+    set the topLeft of cd btn "glider_spritesme" to 20, 20
+    set the topLeft of cd btn "glider_spritesshadow" to -400, -400
     put "" into lastDirPressed
     put "" into levelsSeen
     put 1 into line 1 of levelsSeen
@@ -74,8 +74,8 @@ on startNewGame
     repeat with lvl = 1 to 40
         put line lvl of lvlData into curLvlData
         put line lvl of lvlObjects into curLvlObjects
-        put item 2 of curLvlData into numobjects
-        repeat with i = 1 to numobjects
+        put item 2 of curLvlData into numObjects
+        repeat with i = 1 to numObjects
             put (propsPerObj * (i-1))  into j
             put line lvl of lvlObjects into tmp
             put 1 into item (j+9) of tmp
