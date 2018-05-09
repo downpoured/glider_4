@@ -1,4 +1,11 @@
--- Glider, ported from Glider4 by Ben Fisher, https://github.com/downpoured/glider_4
+-- Glider 4, by john calhoun
+-- ported/rewritten by Ben Fisher
+-- https://github.com/downpoured/glider_4
+
+-- when editing the game, it might be useful
+-- to know that you can press Shift+N and click
+-- Start Over to reset the game.
+
 -- script of cd btn "btn_continue":
 
 -- cd btn "glider_bg0"
@@ -63,14 +70,14 @@ on startnewgame
     global lvlData, lvlObjects
     -- turn on all objects in all levels...change this later.
     repeat with lv = 1 to 40
-        put line (lv) of lvlData into curlvlData
-        put line (lv) of lvlObjects into curlvlObjects
+        put line lv of lvlData into curlvlData
+        put line lv of lvlObjects into curlvlObjects
         put item 2 of curlvlData into numobjects
         repeat with i = 1 to numobjects
             put (propsperobj * (i-1))  into j
-            put line (lv) of lvlObjects into tmp
+            put line lv of lvlObjects into tmp
             put 1 into item (j+9) of tmp
-            put tmp into line (lv) of lvlObjects
+            put tmp into line lv of lvlObjects
         end repeat
     end repeat
 end startnewgame
@@ -113,6 +120,15 @@ on initui
     set the icon of cd btn "glider_spriteslivesicon" to sprites_right_forward
     set the showlabel of cd btn "glider_spriteslivesicon" to false
     
+    play "glider_1_Aww" load
+    play "glider_1_BeamIn" load
+    play "glider_1_Clock" load
+    play "glider_1_Energize" load
+    play "glider_1_Extra" load
+    play "glider_1_GetBand" load
+    play "glider_1_Guitar" load
+    play "glider_1_Zap" load
+    
     set the defaulttextfont of cd fld "roomname" to "chicago" 
     set the defaulttextfont of cd fld "score" to "chicago" 
     set the defaulttextfont of cd fld "lives" to "chicago" 
@@ -125,7 +141,6 @@ on initui
     repeat with x=1 to 16
         hide cd btn ("glider_sprites" & x)
         set the style of cd btn ("glider_sprites" & x) to "transparent"
---~         set the style of cd btn ("glider_sprites" & x) to "rectangle"
         set the showlabel of cd btn ("glider_sprites" & x)  to false
         set the autohilite of cd btn ("glider_sprites" & x)  to false
         set the icon of cd btn ("glider_sprites" & x) to 0

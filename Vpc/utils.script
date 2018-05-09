@@ -1,4 +1,11 @@
--- Glider, ported from Glider4 by Ben Fisher, https://github.com/downpoured/glider_4
+-- Glider 4, by john calhoun
+-- ported/rewritten by Ben Fisher
+-- https://github.com/downpoured/glider_4
+
+-- when editing the game, it might be useful
+-- to know that you can press Shift+N and click
+-- Start Over to reset the game.
+
 -- script of stack:
 
 function rectIntersect x0, x1, y0, y1, boxx0, boxx1, boxy0, boxy1
@@ -56,11 +63,13 @@ function getCollideResult objtypename, isOn, amount, extra
         end if
     else if objtypename == "clock" then
         if isOn is 1 then
+            play "glider_1_Clock"
             put "getitem_awardIt" into resultpt1
             put amount into resultpt2
         end if
     else if objtypename == "paper" then
         if isOn is 1 then
+            play "glider_1_Extra"
             put "getitem_extraIt" into resultpt1
             put amount into resultpt2
         end if
@@ -77,17 +86,20 @@ function getCollideResult objtypename, isOn, amount, extra
         end if
     else if objtypename == "battry" then
         if isOn is 1 then
+            play "glider_1_Energize"
             put "getitem_energizeIt" into resultpt1
             put amount into resultpt2
         end if
     else if objtypename == "rbrBnd" then
         if isOn is 1 then
+            play "glider_1_GetBand"
             put "getitem_bandIt" into resultpt1
             put amount into resultpt2
         end if
     else if objtypename == "litSwt" then
         put "lightIt" into resultpt1
     else if objtypename == "outlet" then
+        play "glider_1_Zap"
         put "zapIt" into resultpt1
     else if objtypename == "thermo" then
         put "airOnIt" into resultpt1
@@ -101,7 +113,7 @@ function getCollideResult objtypename, isOn, amount, extra
         put "toggleIt" into resultpt1
         put amount into resultpt2 -- 	{object# linked to}
     else if objtypename == "guitar" then
-        beep
+        play "glider_1_Guitar" 
         put "playIt" into resultpt1
         put "0" into resultpt2
     else if objtypename == "upStar" then

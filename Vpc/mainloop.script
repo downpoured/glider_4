@@ -1,25 +1,33 @@
--- Glider, ported from Glider4 by Ben Fisher, https://github.com/downpoured/glider_4
+-- Glider 4, by john calhoun
+-- ported/rewritten by Ben Fisher
+-- https://github.com/downpoured/glider_4
+
+-- when editing the game, it might be useful
+-- to know that you can press Shift+N and click
+-- Start Over to reset the game.
+
 -- script of cd "cdglider":
 
--- -- level data:
--- 1|roomname
--- 2|numberOObjects
--- 3|leftOpen
--- 4|rightOpen
--- 5|animateKind
--- 6|animateNumber
--- 7|animateDelay
--- 8|conditionCode
--- -- level objects:
--- 1|typename
--- 2|typynumber
--- 3|c1
--- 4|c2
--- 5|c3
--- 6|c4
--- 7|amount
--- 8|extra
--- 9|isOn
+-- level data:
+-- item 1:  roomname
+-- item 2:  numberOObjects
+-- item 3:  leftOpen
+-- item 4:  rightOpen
+-- item 5:  animateKind
+-- item 6:  animateNumber
+-- item 7:  animateDelay
+-- item 8:  conditionCode
+
+-- level objects:
+-- item 1:  typename
+-- item 2:  typenumber
+-- item 3:  c1
+-- item 4:  c2
+-- item 5:  c3
+-- item 6:  c4
+-- item 7:  amount
+-- item 8:  extra
+-- item 9:  isOn
 
 function intersectRoomObject myrect1, myrect2, myrect3, myrect4
     global curlevel, lvlObjects, propsperobj, gcurlvldata, gcurlvlObjects
@@ -97,7 +105,7 @@ end mainloopgame_checkbounds
 
 on newlevelbonus
     global levelsseen, curlevel
-    if line (curlevel) of levelsseen is "" then
+    if line curlevel of levelsseen is "" then
         put "1" into line (curlevel) of levelsseen
         add 200 to cd fld "score"
     end if
@@ -114,11 +122,11 @@ on mainloopgame_collisions
     put 0 into dx 
     put 6 into dy -- by default, we fall
     repeat with numintersect = 2 to numintersects -- ignore the first
-        put item (numintersect) of intersects into i
-        put item (((i-1)*propsperobj)+(1)) of gcurlvlObjects into objtypename
-        put item (((i-1)*propsperobj)+(7)) of gcurlvlObjects into amount
-        put item (((i-1)*propsperobj)+(8)) of gcurlvlObjects into extra
-        put item (((i-1)*propsperobj)+(9)) of gcurlvlObjects into isOn
+        put item numintersect of intersects into i
+        put item ((i-1)*propsperobj+1) of gcurlvlObjects into objtypename
+        put item ((i-1)*propsperobj+7) of gcurlvlObjects into amount
+        put item ((i-1)*propsperobj+8) of gcurlvlObjects into extra
+        put item ((i-1)*propsperobj+9) of gcurlvlObjects into isOn
         
         put getCollideResult(objtypename, isOn, amount, extra) into clr
         put item 1 of clr into collideType
@@ -211,6 +219,7 @@ on mainloopdying
             set the topleft of cd btn "glider_spritesme" to 20,20
             set the icon of cd btn "glider_spritesme" to sprites_right_forward
             put "playing" into state
+            play "glider_1_BeamIn"
         end if
     end if
 end mainloopdying
@@ -299,6 +308,9 @@ end idle
 
 on afterkeydown
     global lastdirpressed, cheat_invincible
+    if "intro" is in the name of this cd then
+        exit afterkeydown
+    end if
     if keychar() is "ArrowLeft" then
         put "-1" into lastdirpressed
     else if keychar() is "ArrowRight" then
@@ -368,7 +380,7 @@ on refreshOnLevelChange
     else if curlevel is "" or curlevel is -1 then
         put -1 into curlevel
         set the icon of cd btn "glider_bg0" to 1
-        set the rect of cd btn "btn_continue" to (512-28)-120,28,512-28,28+74
+        set the rect of cd btn "btn_continue" to 367,22,487,96
         set the label of cd btn "btn_continue" to "New Game"
     else if curlevel is -2 then
         set the icon of cd btn "glider_bg0" to 2
@@ -416,7 +428,7 @@ on refreshOnLevelChange
         
         -- actually load the room
         global curlevel, lvlData, lvlObjects, dx, dy, propsperobj
-        put line (curlevel) of lvlData into curlvldata
+        put line curlevel of lvlData into curlvldata
         put item 1 of curlvldata into cd fld "roomname"
         if cd fld "roomname" is "Welcome..." then
             put "Across the room..." into cd fld "roomname"
@@ -519,7 +531,7 @@ on refreshOnLevelChange
     end if
     
     if curlevel is not "needreset" and curlevel >= 1 then
-        put line (curlevel) of lvlData into gcurlvldata
-        put line (curlevel) of lvlObjects into gcurlvlObjects
+        put line curlevel of lvlData into gcurlvldata
+        put line curlevel of lvlObjects into gcurlvlObjects
     end if
 end refreshOnLevelChange

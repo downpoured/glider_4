@@ -2,3 +2,4 @@
 *.py text
 *.vpc text
 *.lua text
+*.script text
