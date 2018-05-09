@@ -215,7 +215,6 @@ on initSpriteConstantsAndLoadGameData
     put 69 into sprites_drop3
     put 70 into sprites_drop4
     put 71 into sprites_drop5
-
     
     global lvlData, lvlObjects
     put "Welcome...|5|0|1|0|0|0|0" into line 1 of lvlData
