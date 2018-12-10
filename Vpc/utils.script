@@ -1,7 +1,6 @@
 --- Glider 4, by john calhoun
 --- ported/rewritten by Ben Fisher
-
--- https://github.com/downpoured/glider_4
+-- https://github.com/moltenjs/glider_4
 
 -- when editing the game, it might be useful
 -- to know that you can press Shift+N and click
