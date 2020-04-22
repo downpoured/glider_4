@@ -1,5 +1,5 @@
---- Glider 4, by john calhoun
---- ported/rewritten by Ben Fisher
+-- Glider 4, by john calhoun
+-- ported/rewritten by Ben Fisher
 -- https://github.com/moltenform/glider_4
 
 -- when editing the game, it might be useful
@@ -440,3 +440,4 @@ on initSpriteConstantsAndGameData
     put "218|325|266|338|44|0|0|flrVnt|8|311|325|359|338|44|0|0|flrVnt|8|396|325|444|338|44|0|0|cabnet|4|11|2" after line 40 of lvlObjects
     put "13|76|324|0|0|0|paper|17|29|193|77|214|1000|0|0" after line 40 of lvlObjects
 end initSpriteConstantsAndGameData
+
