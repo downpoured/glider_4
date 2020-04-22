@@ -71,7 +71,7 @@ on startNewGame
     put 1 into line 1 of levelsSeen
     put 0 into dy
     put 0 into clockCount
-    set the itemdelimiter to "|"    
+    set the itemdelimiter to "|"
     put 9 into propsPerObj
     
     global lvlData, lvlObjects

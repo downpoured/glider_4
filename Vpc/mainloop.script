@@ -34,6 +34,7 @@ function intersectRoomObject meRect1, meRect2, \
     global curLevel, lvlObjects, propsPerObj
     global gCurLvlData, gCurLvlObjects
     
+    set the itemdelimiter to "|"
     put item 2 of gCurLvlData into numObjects
     put "" into ret
     put the left of cd btn "gliderSpritesMe" into x0
@@ -91,6 +92,7 @@ end mainLoopMotion
 on mainLoopCheckBounds
     global curLevel, propsPerObj, dx, dy
     global gCurLvlData, gCurLvlObjects
+    set the itemdelimiter to "|"
     put (item 3 of gCurLvlData is 1) into canGoRoomLeft
     put (item 4 of gCurLvlData is 1) into canGoRoomRght
     if the bottom of cd btn "gliderSpritesMe" > 328 then
@@ -138,6 +140,7 @@ on mainLoopCollide
         the bottom of cd btn "gliderSpritesMe") \
         into intersects
     
+    set the itemdelimiter to "|"
     put the number of items in intersects into \
         numIntersects
     
@@ -234,6 +237,7 @@ on mainLoopOutletSpark i
     global gCurLvlData, gCurLvlObjects
     
     add 1 to clockCount
+    set the itemdelimiter to "|"
     if clockCount mod 20 is 1 then
         put (propsPerObj * (i-1)) into j
         put item (j+1) of gCurLvlObjects into objTypeName
@@ -409,6 +413,7 @@ end afterKeyDown
 on modifyObjectState itemNumber, newValue
     global curLevel, gCurLvlData, gCurLvlObjects
     global lvlData, lvlObjects
+    set the itemdelimiter to "|"
     
     -- modify cached for this level
     put newValue into item (itemNumber) \
@@ -507,6 +512,7 @@ on refreshOnLevelChange
         global curLevel, lvlData, lvlObjects, dx, dy
         global propsPerObj
         put line curLevel of lvlData into curLvlData
+        set the itemdelimiter to "|"
         put item 1 of curLvlData into cd fld "roomName"
         if cd fld "roomName" is "Welcome..." then
             put "Across the room..." into \
