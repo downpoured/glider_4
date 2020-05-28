@@ -386,7 +386,7 @@ on afterKeyDown
         put "-1" into lastDirPressed
     else if keychar() is "ArrowRight" then
         put "1" into lastDirPressed
-    else if keyChar() is "I" and shiftKey() and \
+    else if keyChar() is "I" and shiftKey() is down and \
         not keyRepeated() then
         answer "toggle cheatcode:invincible"
         if cheatInvincible is true then
@@ -394,11 +394,11 @@ on afterKeyDown
         else
             put true into cheatInvincible
         end if
-    else if keyChar() is "L" and shiftKey() and \
+    else if keyChar() is "L" and shiftKey() is down and \
         not keyRepeated() then
         answer "cheatcode:new life"
         add 1 to cd fld "lives"
-    else if keyChar() is "N" and shiftKey() and \
+    else if keyChar() is "N" and shiftKey() is down and \
         not keyRepeated() then
         global curLevel, state
         put "needReset" into curLevel
@@ -490,7 +490,8 @@ on refreshOnLevelChange
                 into cd fld "gameOver"
         end if
     else
-        set the idlerate to "faster"
+        set the idlerate to "faster2"
+        set the skipArrowkeyMessages to true
         
         global spritesVentPatternY
         show cd btn "gliderSpritesMe"
@@ -721,3 +722,4 @@ on refreshOnLevelChangeIcons objTypeName, i, \
             spritesMacTsh
     end if
 end refreshOnLevelChangeIcons
+

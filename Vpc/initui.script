@@ -53,7 +53,7 @@ on startNewGame
     put false into cheatInvincible
     put "playing" into state
     put "" into cd fld "behindLives"
-    put 3 into cd fld "lives"
+    put 5 into cd fld "lives"
     put 0 into cd fld "score"
     put 1 into curLevel
     
@@ -71,7 +71,7 @@ on startNewGame
     put 1 into line 1 of levelsSeen
     put 0 into dy
     put 0 into clockCount
-    set the itemdelimiter to "|"
+    set the itemdelimiter to "|"    
     put 9 into propsPerObj
     
     global lvlData, lvlObjects
@@ -186,3 +186,4 @@ on initUI
     put -1 into curLevel
     refreshOnLevelChange
 end initUI
+
